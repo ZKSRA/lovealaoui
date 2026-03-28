@@ -9,7 +9,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  // CHANGE SITE LATER
-  site: 'https://89746726.microstore-6v7.pages.dev/#_',
+  site: 'https://lovealaoui.com',
   integrations: [sitemap()],
 });

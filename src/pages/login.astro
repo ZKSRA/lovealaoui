@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
-if (Astro.locals.user) {
+if (Astro.locals?.user) {
   return Astro.redirect("/account");
 }
 

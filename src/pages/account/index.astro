@@ -1,7 +1,9 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
-if (!Astro.locals.user) {
+const currentUser = Astro.locals?.user;
+
+if (!currentUser) {
   return Astro.redirect("/login?next=/account");
 }
 ---
@@ -13,11 +15,11 @@ if (!Astro.locals.user) {
       <dl class="mt-4 space-y-2 text-sm">
         <div>
           <dt class="text-base-500">Email</dt>
-          <dd class="font-medium text-base-900">{Astro.locals.user.email ?? "No email returned"}</dd>
+          <dd class="font-medium text-base-900">{currentUser.email ?? "No email returned"}</dd>
         </div>
         <div>
           <dt class="text-base-500">User ID</dt>
-          <dd class="break-all text-base-700">{Astro.locals.user.id}</dd>
+          <dd class="break-all text-base-700">{currentUser.id}</dd>
         </div>
       </dl>
       <div class="mt-6 flex flex-wrap gap-3">
