@@ -4,7 +4,9 @@ import { DEFAULT_PRODUCT } from "@/lib/products";
 import { hasPurchase } from "@/lib/supabase";
 import { hasServerCommerceConfig } from "@/lib/env";
 
-if (!Astro.locals.user) {
+const currentUser = Astro.locals?.user;
+
+if (!currentUser) {
   return Astro.redirect("/login?next=/my-deck");
 }
 
@@ -13,7 +15,7 @@ let serverConfigured = hasServerCommerceConfig;
 
 if (serverConfigured) {
   try {
-    purchased = await hasPurchase(Astro.locals.user.id, DEFAULT_PRODUCT.slug);
+    purchased = await hasPurchase(currentUser.id, DEFAULT_PRODUCT.slug);
   } catch {
     serverConfigured = false;
   }
