@@ -1,12 +1,22 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 
-if (Astro.locals.user) {
+if (Astro.locals?.user) {
   return Astro.redirect("/account");
 }
 
 const next = Astro.url.searchParams.get("next") ?? "/my-deck";
 const errorCode = Astro.url.searchParams.get("error");
+
+const errorMessageMap: Record<string, string> = {
+  missing_fields: "Please enter both an email and password.",
+  missing_supabase_config:
+    "Signup is not configured yet. Set PUBLIC_SUPABASE_URL and PUBLIC_SUPABASE_ANON_KEY in your Worker environment.",
+  signup_unavailable: "Signup service is temporarily unavailable. Please try again shortly.",
+  signup_failed: "Signup failed. Check email/password or your Supabase Auth settings.",
+};
+
+const errorMessage = errorCode ? errorMessageMap[errorCode] ?? "We couldn't create your account." : null;
 ---
 
 <BaseLayout>
@@ -14,7 +24,11 @@ const errorCode = Astro.url.searchParams.get("error");
     <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-base-100 sm:p-8">
       <h1 class="text-2xl font-semibold">Create your account</h1>
       <p class="mt-2 text-sm text-base-600">Save purchases and unlock your deck on any device.</p>
-      {errorCode && <p class="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">We couldn't create your account. Try another email or verify Supabase settings.</p>}
+      {
+        errorMessage && (
+          <p class="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{errorMessage}</p>
+        )
+      }
       <form method="post" action="/api/auth/signup" class="mt-6 space-y-3">
         <input type="hidden" name="next" value={next} />
         <label class="block text-sm">
