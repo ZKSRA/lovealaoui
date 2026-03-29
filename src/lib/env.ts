@@ -1,15 +1,53 @@
+type EnvKey =
+  | "PUBLIC_SITE_URL"
+  | "PUBLIC_SUPABASE_URL"
+  | "PUBLIC_SUPABASE_ANON_KEY"
+  | "SUPABASE_SERVICE_ROLE_KEY"
+  | "STRIPE_SECRET_KEY"
+  | "STRIPE_WEBHOOK_SECRET";
+
+type RuntimeEnv = Partial<Record<EnvKey, string>>;
+
 const optional = (value: string | undefined) => value?.trim() ?? "";
 
+let runtimeEnv: RuntimeEnv = {};
+
+/**
+ * Called from middleware/routes when runtime bindings are available (e.g., Cloudflare Workers env).
+ */
+export function setRuntimeEnv(bindings: RuntimeEnv | undefined) {
+  runtimeEnv = bindings ?? {};
+}
+
+function readEnv(key: EnvKey) {
+  const runtimeValue = runtimeEnv[key] ?? "";
+  const importMetaValue = (import.meta.env[key] as string | undefined) ?? "";
+  const processValue = typeof process !== "undefined" ? process.env?.[key] ?? "" : "";
+
+  return optional(runtimeValue || importMetaValue || processValue || undefined);
+}
+
 export const env = {
-  publicSiteUrl: optional(import.meta.env.PUBLIC_SITE_URL),
-  supabaseUrl: optional(import.meta.env.PUBLIC_SUPABASE_URL),
-  supabaseAnonKey: optional(import.meta.env.PUBLIC_SUPABASE_ANON_KEY),
-  supabaseServiceRoleKey: optional(import.meta.env.SUPABASE_SERVICE_ROLE_KEY),
-  stripeSecretKey: optional(import.meta.env.STRIPE_SECRET_KEY),
-  stripeWebhookSecret: optional(import.meta.env.STRIPE_WEBHOOK_SECRET),
+  get publicSiteUrl() {
+    return readEnv("PUBLIC_SITE_URL");
+  },
+  get supabaseUrl() {
+    return readEnv("PUBLIC_SUPABASE_URL");
+  },
+  get supabaseAnonKey() {
+    return readEnv("PUBLIC_SUPABASE_ANON_KEY");
+  },
+  get supabaseServiceRoleKey() {
+    return readEnv("SUPABASE_SERVICE_ROLE_KEY");
+  },
+  get stripeSecretKey() {
+    return readEnv("STRIPE_SECRET_KEY");
+  },
+  get stripeWebhookSecret() {
+    return readEnv("STRIPE_WEBHOOK_SECRET");
+  },
 };
 
-export const hasSupabasePublicConfig = Boolean(env.supabaseUrl && env.supabaseAnonKey);
-export const hasServerCommerceConfig = Boolean(
-  env.supabaseUrl && env.supabaseServiceRoleKey && env.stripeSecretKey && env.publicSiteUrl,
-);
+export const hasSupabasePublicConfig = () => Boolean(env.supabaseUrl && env.supabaseAnonKey);
+export const hasServerCommerceConfig = () =>
+  Boolean(env.supabaseUrl && env.supabaseServiceRoleKey && env.stripeSecretKey && env.publicSiteUrl);
