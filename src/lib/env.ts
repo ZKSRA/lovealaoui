@@ -8,7 +8,7 @@ type EnvKey =
 
 type RuntimeEnv = Partial<Record<EnvKey, string>>;
 
-const optional = (value: string | undefined) => value?.trim() ?? "";
+const optional = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
 let runtimeEnv: RuntimeEnv = {};
 
@@ -20,11 +20,11 @@ export function setRuntimeEnv(bindings: RuntimeEnv | undefined) {
 }
 
 function readEnv(key: EnvKey) {
-  const runtimeValue = runtimeEnv[key] ?? "";
-  const importMetaValue = (import.meta.env[key] as string | undefined) ?? "";
-  const processValue = typeof process !== "undefined" ? process.env?.[key] ?? "" : "";
+  const runtimeValue = runtimeEnv[key];
+  const importMetaValue = import.meta.env[key] as string | undefined;
+  const processValue = typeof process !== "undefined" ? process.env?.[key] : undefined;
 
-  return optional(runtimeValue || importMetaValue || processValue || undefined);
+  return optional(runtimeValue) || optional(importMetaValue) || optional(processValue);
 }
 
 export const env = {
