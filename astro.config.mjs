@@ -4,8 +4,9 @@ import sitemap from '@astrojs/sitemap';
 import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
+  adapter: cloudflare({ prerenderEnvironment: "node" }),
   output: 'server',
-  adapter: cloudflare(),
+  site: 'https://lovealaoui.workers.dev',
   vite: {
     plugins: [tailwindcss()],
   },
