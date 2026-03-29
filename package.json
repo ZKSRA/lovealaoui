@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "deploy:workers": "wrangler deploy"
+    "deploy:workers": "wrangler deploy --config dist/server/wrangler.json",
+    "deploy:pages": "wrangler pages deploy dist/client"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.1.4",
