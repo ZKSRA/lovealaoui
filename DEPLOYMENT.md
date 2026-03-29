@@ -41,3 +41,8 @@ Set these in your Cloudflare Worker/Build settings:
 
 
 Runtime note: in Worker SSR, bindings are read from runtime env first (via middleware), then fall back to build-time `import.meta.env` and finally `process.env`.
+
+
+## Package manager
+
+Use npm (not bun) for this repo. `package.json` pins `packageManager` to npm and uses npm `overrides` for Vite dependency stability.
