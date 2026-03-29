@@ -9,6 +9,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  site: '',
+  site: 'https://lovealaoui.workers.dev',
   integrations: [sitemap()],
 });
