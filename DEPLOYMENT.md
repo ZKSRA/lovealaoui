@@ -24,3 +24,17 @@ npm run deploy:pages
 Cloudflare Pages reserves `ASSETS` as a binding name. The Astro Cloudflare server output expects an assets binding for SSR worker deployment, so using Pages deploy for this SSR output can fail with:
 
 > The name 'ASSETS' is reserved in Pages projects.
+
+
+## Required environment variables
+
+Set these in your Cloudflare Worker/Build settings:
+
+- `PUBLIC_SITE_URL`
+- `PUBLIC_SUPABASE_URL`
+- `PUBLIC_SUPABASE_ANON_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `STRIPE_SECRET_KEY`
+- `STRIPE_WEBHOOK_SECRET`
+
+`PUBLIC_*` variables are consumed by server code through `import.meta.env` (and fallback to `process.env`), so they must be available in the Worker/build environment.
