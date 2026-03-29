@@ -30,5 +30,7 @@
   "overrides": {
     "vite": "7.3.1",
     "@cloudflare/vite-plugin": "1.30.2"
+  "overrides": {
+    "vite": "7.3.1"
   }
 }
