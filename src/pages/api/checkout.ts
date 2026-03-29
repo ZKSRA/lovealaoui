@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request, locals, redirect }) => {
     return redirect("/login?next=/my-deck");
   }
 
-  if (!hasServerCommerceConfig) {
+  if (!hasServerCommerceConfig()) {
     return redirect("/my-deck?error=server_config_missing");
   }
 

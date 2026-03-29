@@ -1,7 +1,18 @@
 import { defineMiddleware } from "astro:middleware";
 import { getSessionUser } from "@/lib/auth";
+import { setRuntimeEnv } from "@/lib/env";
 
 export const onRequest = defineMiddleware(async (context, next) => {
+  const runtimeBindings =
+    ((context.locals as { runtime?: { env?: Record<string, string> } }).runtime?.env as
+      | Record<string, string>
+      | undefined) ??
+    ((context as { runtime?: { env?: Record<string, string> } }).runtime?.env as
+      | Record<string, string>
+      | undefined);
+
+  setRuntimeEnv(runtimeBindings);
+
   try {
     context.locals.user = await getSessionUser(context.cookies);
   } catch {
