@@ -1,7 +1,7 @@
 import { env, hasSupabasePublicConfig } from "./env";
 
 function assertPublicConfig() {
-  if (!hasSupabasePublicConfig) {
+  if (!hasSupabasePublicConfig()) {
     throw new Error("Missing PUBLIC_SUPABASE_URL or PUBLIC_SUPABASE_ANON_KEY");
   }
 }

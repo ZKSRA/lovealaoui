@@ -11,7 +11,7 @@ if (!currentUser) {
 }
 
 let purchased = false;
-let serverConfigured = hasServerCommerceConfig;
+let serverConfigured = hasServerCommerceConfig();
 
 if (serverConfigured) {
   try {
