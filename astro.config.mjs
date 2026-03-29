@@ -6,7 +6,7 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   adapter: cloudflare(),
   output: 'server',
-  site: 'https://lovealaoui.com',
+  site: 'https://lovealaoui.workers.dev',
   vite: {
     plugins: [tailwindcss()],
   },

@@ -14,7 +14,12 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     return redirect("/login?error=missing_fields");
   }
 
-  const result = await loginWithEmail(email, password);
+  let result;
+  try {
+    result = await loginWithEmail(email, password);
+  } catch {
+    return redirect("/login?error=login_unavailable");
+  }
 
   if (result.error || !result.session) {
     return redirect("/login?error=login_failed");
