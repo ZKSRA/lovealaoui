@@ -11,21 +11,23 @@ const user = Astro.locals?.user;
   </head>
   <body class="min-h-screen bg-gradient-to-b from-rose-50 via-base-50 to-base-100 text-base-900">
     <header class="mx-auto flex w-full max-w-6xl items-center justify-between px-4 pt-5 sm:px-6 lg:px-10">
-      <a href="/" class="text-sm font-semibold tracking-wide text-base-900">Love Alaoui</a>
-      <nav class="flex items-center gap-2 text-sm">
-        <a href="/my-deck" class="rounded-full px-3 py-1.5 hover:bg-base-100">My Deck</a>
+      <a href="/" class="text-sm font-semibold tracking-[0.08em] text-base-900">Love Alaoui</a>
+      <nav class="flex items-center gap-1 text-sm sm:gap-2" aria-label="Primary">
+        <a href="/#featured-product" class="rounded-full px-3 py-1.5 hover:bg-base-100">Shop</a>
+        <a href="/#how-it-works" class="rounded-full px-3 py-1.5 hover:bg-base-100">How it works</a>
+        <a href="/#faq" class="rounded-full px-3 py-1.5 hover:bg-base-100">FAQ</a>
         {
           user ? (
             <>
-              <a href="/account" class="rounded-full px-3 py-1.5 hover:bg-base-100">Account</a>
+              <a href="/my-deck" class="rounded-full bg-base-900 px-3 py-1.5 text-white">My Deck</a>
               <form method="post" action="/api/auth/logout">
-                <button class="rounded-full bg-base-900 px-3 py-1.5 text-white" type="submit">Logout</button>
+                <button class="rounded-full px-3 py-1.5 hover:bg-base-100" type="submit">Logout</button>
               </form>
             </>
           ) : (
             <>
               <a href="/login" class="rounded-full px-3 py-1.5 hover:bg-base-100">Login</a>
-              <a href="/signup" class="rounded-full bg-base-900 px-3 py-1.5 text-white">Sign up</a>
+              <a href="/signup?next=/my-deck" class="rounded-full bg-base-900 px-3 py-1.5 text-white">Get Deck</a>
             </>
           )
         }
