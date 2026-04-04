@@ -28,11 +28,22 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     return redirect("/signup?error=signup_unavailable");
   }
 
+  if (result.error) {
+    console.error("[signup] signup_failed", result.error.message ?? "unknown_error");
   if (result.error || !result.session) {
     console.error("[signup] signup_failed", result.error?.message ?? "missing_session");
     return redirect("/signup?error=signup_failed");
   }
 
-  setAuthCookies(cookies, result.session);
-  return redirect(next);
+  if (result.session) {
+    setAuthCookies(cookies, result.session);
+    return redirect(next);
+  }
+
+  // Supabase can return `user` with no `session` when email confirmation is required.
+  if (result.user) {
+    return redirect("/signup?notice=check_email");
+  }
+
+  return redirect("/signup?error=signup_failed");
 };

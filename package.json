@@ -9,6 +9,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "deploy:workers": "wrangler deploy --config dist/server/wrangler.json",
+    "deploy:pages": "wrangler pages deploy dist/client",
+    "check:package-json": "node scripts/check-package-json.mjs"
     "deploy:pages": "wrangler pages deploy dist/client"
   },
   "dependencies": {

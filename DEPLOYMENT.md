@@ -37,6 +37,21 @@ Set these in your Cloudflare Worker/Build settings:
 - `STRIPE_SECRET_KEY`
 - `STRIPE_WEBHOOK_SECRET`
 
+`PUBLIC_*` variables are consumed by server code through runtime Worker bindings first (via `cloudflare:workers`), then `import.meta.env`, then `process.env`.
+
+## Package manager and lockfile
+
+- The repo is pinned to npm via `"packageManager": "npm@10.9.2"`.
+- Cloudflare may still choose Bun for dependency install in some environments.
+- Keep `package.json` strictly valid JSON with no duplicate keys, or Bun will fail before install with `ParserError parsing package.json`.
+
+Run this guard locally before pushing:
+
+```bash
+npm run check:package-json
+```
+
+A GitHub Action also runs this check on push/PR.
 `PUBLIC_*` variables are consumed by server code through `import.meta.env` (and fallback to `process.env`), so they must be available in the Worker/build environment.
 
 

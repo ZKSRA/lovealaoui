@@ -1,3 +1,5 @@
+import { env as cloudflareEnv } from "cloudflare:workers";
+
 type EnvKey =
   | "PUBLIC_SITE_URL"
   | "PUBLIC_SUPABASE_URL"
@@ -6,6 +8,15 @@ type EnvKey =
   | "STRIPE_SECRET_KEY"
   | "STRIPE_WEBHOOK_SECRET";
 
+const optional = (value: unknown) => (typeof value === "string" ? value.trim() : "");
+
+function readEnv(key: EnvKey) {
+  const runtimeValue = optional(cloudflareEnv?.[key as keyof typeof cloudflareEnv]);
+  const importMetaValue = optional(import.meta.env[key]);
+  const processValue = optional(typeof process !== "undefined" ? process.env?.[key] : undefined);
+
+  return runtimeValue || importMetaValue || processValue;
+}
 type RuntimeEnv = Partial<Record<EnvKey, string>>;
 
 const optional = (value: string | undefined) => value?.trim() ?? "";
