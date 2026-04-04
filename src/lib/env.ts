@@ -1,15 +1,44 @@
-const optional = (value: string | undefined) => value?.trim() ?? "";
+import { env as cloudflareEnv } from "cloudflare:workers";
+
+type EnvKey =
+  | "PUBLIC_SITE_URL"
+  | "PUBLIC_SUPABASE_URL"
+  | "PUBLIC_SUPABASE_ANON_KEY"
+  | "SUPABASE_SERVICE_ROLE_KEY"
+  | "STRIPE_SECRET_KEY"
+  | "STRIPE_WEBHOOK_SECRET";
+
+const optional = (value: unknown) => (typeof value === "string" ? value.trim() : "");
+
+function readEnv(key: EnvKey) {
+  const runtimeValue = optional(cloudflareEnv?.[key as keyof typeof cloudflareEnv]);
+  const importMetaValue = optional(import.meta.env[key]);
+  const processValue = optional(typeof process !== "undefined" ? process.env?.[key] : undefined);
+
+  return runtimeValue || importMetaValue || processValue;
+}
 
 export const env = {
-  publicSiteUrl: optional(import.meta.env.PUBLIC_SITE_URL),
-  supabaseUrl: optional(import.meta.env.PUBLIC_SUPABASE_URL),
-  supabaseAnonKey: optional(import.meta.env.PUBLIC_SUPABASE_ANON_KEY),
-  supabaseServiceRoleKey: optional(import.meta.env.SUPABASE_SERVICE_ROLE_KEY),
-  stripeSecretKey: optional(import.meta.env.STRIPE_SECRET_KEY),
-  stripeWebhookSecret: optional(import.meta.env.STRIPE_WEBHOOK_SECRET),
+  get publicSiteUrl() {
+    return readEnv("PUBLIC_SITE_URL");
+  },
+  get supabaseUrl() {
+    return readEnv("PUBLIC_SUPABASE_URL");
+  },
+  get supabaseAnonKey() {
+    return readEnv("PUBLIC_SUPABASE_ANON_KEY");
+  },
+  get supabaseServiceRoleKey() {
+    return readEnv("SUPABASE_SERVICE_ROLE_KEY");
+  },
+  get stripeSecretKey() {
+    return readEnv("STRIPE_SECRET_KEY");
+  },
+  get stripeWebhookSecret() {
+    return readEnv("STRIPE_WEBHOOK_SECRET");
+  },
 };
 
-export const hasSupabasePublicConfig = Boolean(env.supabaseUrl && env.supabaseAnonKey);
-export const hasServerCommerceConfig = Boolean(
-  env.supabaseUrl && env.supabaseServiceRoleKey && env.stripeSecretKey && env.publicSiteUrl,
-);
+export const hasSupabasePublicConfig = () => Boolean(env.supabaseUrl && env.supabaseAnonKey);
+export const hasServerCommerceConfig = () =>
+  Boolean(env.supabaseUrl && env.supabaseServiceRoleKey && env.stripeSecretKey && env.publicSiteUrl);

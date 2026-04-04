@@ -8,7 +8,11 @@ export const POST: APIRoute = async ({ cookies, redirect }) => {
   const accessToken = cookies.get(cookieNames.access)?.value;
 
   if (accessToken) {
-    await logout(accessToken);
+    try {
+      await logout(accessToken);
+    } catch {
+      // continue and clear cookies even if upstream logout fails
+    }
   }
 
   clearAuthCookies(cookies);
