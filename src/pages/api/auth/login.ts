@@ -28,6 +28,11 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
     return redirect("/login?error=login_unavailable");
   }
 
+  const message = result.error?.message?.toLowerCase() ?? "";
+  if (message.includes("email not confirmed") || message.includes("email_not_confirmed")) {
+    return redirect("/login?error=email_not_confirmed");
+  }
+
   if (result.error || !result.session) {
     console.error("[login] login_failed", result.error?.message ?? "missing_session");
     return redirect("/login?error=login_failed");

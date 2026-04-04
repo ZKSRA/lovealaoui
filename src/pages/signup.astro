@@ -7,6 +7,7 @@ if (Astro.locals?.user) {
 
 const next = Astro.url.searchParams.get("next") ?? "/my-deck";
 const errorCode = Astro.url.searchParams.get("error");
+const noticeCode = Astro.url.searchParams.get("notice");
 
 const errorMessageMap: Record<string, string> = {
   missing_fields: "Please enter both an email and password.",
@@ -17,6 +18,15 @@ const errorMessageMap: Record<string, string> = {
 };
 
 const errorMessage = errorCode ? errorMessageMap[errorCode] ?? "We couldn't create your account." : null;
+
+const noticeMessageMap: Record<string, string> = {
+  check_email:
+    "Account created. Check your inbox and confirm your email before logging in.",
+};
+
+const noticeMessage = noticeCode
+  ? noticeMessageMap[noticeCode] ?? "Please check your email for next steps."
+  : null;
 ---
 
 <BaseLayout>
@@ -24,6 +34,11 @@ const errorMessage = errorCode ? errorMessageMap[errorCode] ?? "We couldn't crea
     <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-base-100 sm:p-8">
       <h1 class="text-2xl font-semibold">Create your account</h1>
       <p class="mt-2 text-sm text-base-600">Save purchases and unlock your deck on any device.</p>
+      {
+        noticeMessage && (
+          <p class="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm text-emerald-800">{noticeMessage}</p>
+        )
+      }
       {
         errorMessage && (
           <p class="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{errorMessage}</p>
