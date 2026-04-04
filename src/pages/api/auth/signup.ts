@@ -30,6 +30,8 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
   if (result.error) {
     console.error("[signup] signup_failed", result.error.message ?? "unknown_error");
+  if (result.error || !result.session) {
+    console.error("[signup] signup_failed", result.error?.message ?? "missing_session");
     return redirect("/signup?error=signup_failed");
   }
 

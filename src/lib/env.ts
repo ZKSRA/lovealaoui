@@ -17,6 +17,26 @@ function readEnv(key: EnvKey) {
 
   return runtimeValue || importMetaValue || processValue;
 }
+type RuntimeEnv = Partial<Record<EnvKey, string>>;
+
+const optional = (value: string | undefined) => value?.trim() ?? "";
+
+let runtimeEnv: RuntimeEnv = {};
+
+/**
+ * Called from middleware/routes when runtime bindings are available (e.g., Cloudflare Workers env).
+ */
+export function setRuntimeEnv(bindings: RuntimeEnv | undefined) {
+  runtimeEnv = bindings ?? {};
+}
+
+function readEnv(key: EnvKey) {
+  const runtimeValue = runtimeEnv[key] ?? "";
+  const importMetaValue = (import.meta.env[key] as string | undefined) ?? "";
+  const processValue = typeof process !== "undefined" ? process.env?.[key] ?? "" : "";
+
+  return optional(runtimeValue || importMetaValue || processValue || undefined);
+}
 
 export const env = {
   get publicSiteUrl() {
