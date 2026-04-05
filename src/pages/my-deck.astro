@@ -13,12 +13,21 @@ if (!currentUser) {
 let purchased = false;
 let purchaseValidationConfigured = hasPurchaseValidationConfig();
 const checkoutConfigured = hasCheckoutConfig();
+let purchaseValidationMessage =
+  "Purchase validation is unavailable. Check `PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in Worker settings.";
+
+if (!purchaseValidationConfigured) {
+  purchaseValidationMessage =
+    "Purchase validation is unavailable because `PUBLIC_SUPABASE_URL` or `SUPABASE_SERVICE_ROLE_KEY` is missing in Worker settings.";
+}
 
 if (purchaseValidationConfigured) {
   try {
     purchased = await hasPurchase(currentUser.id, DEFAULT_PRODUCT.slug);
   } catch (error) {
     purchaseValidationConfigured = false;
+    purchaseValidationMessage =
+      "Purchase validation could not reach Supabase. Check the Worker logs for the exact query error or table permission issue.";
     console.error("[my-deck] purchase validation unavailable", error);
   }
 }
@@ -33,7 +42,7 @@ if (purchaseValidationConfigured) {
       {
         !purchaseValidationConfigured ? (
           <div class="mt-6 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-            Purchase validation is unavailable. Check `PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in Worker settings.
+            {purchaseValidationMessage}
           </div>
         ) : purchased ? (
           <div class="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-5">
