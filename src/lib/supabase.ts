@@ -1,3 +1,4 @@
+import { createClient, type Session, type User } from "@supabase/supabase-js";
 import { env, hasSupabasePublicConfig } from "./env";
 
 function assertPublicConfig() {
@@ -6,23 +7,20 @@ function assertPublicConfig() {
   }
 }
 
-const authHeaders = () => ({
-  apikey: env.supabaseAnonKey,
-  "Content-Type": "application/json",
-});
+type AppUser = {
+  id: string;
+  email?: string;
+};
 
 export type AuthSession = {
   access_token: string;
   refresh_token: string;
-  user: {
-    id: string;
-    email?: string;
-  };
+  user: AppUser;
 };
 
 export type AuthResult = {
   session: AuthSession | null;
-  user: AuthSession["user"] | null;
+  user: AppUser | null;
   error?: { message?: string };
 };
 
@@ -37,71 +35,92 @@ async function fetchWithTimeout(input: string, init: RequestInit, timeoutMs = 12
   }
 }
 
-async function parseAuthResponse(response: Response): Promise<AuthResult> {
-  const data = (await response.json().catch(() => null)) as AuthResult | null;
+function createSupabaseAuthClient() {
+  assertPublicConfig();
 
-  if (!response.ok || !data) {
-    return {
-      session: null,
-      user: null,
-      error: { message: data?.error?.message ?? `Supabase auth request failed (${response.status})` },
-    };
-  }
+  return createClient(env.supabaseUrl, env.supabaseAnonKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false,
+    },
+    global: {
+      fetch: (input, init) => fetchWithTimeout(String(input), init ?? {}),
+    },
+  });
+}
 
-  return data;
+function normalizeUser(user: User | null): AppUser | null {
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    email: user.email ?? undefined,
+  };
+}
+
+function normalizeSession(session: Session | null): AuthSession | null {
+  if (!session) return null;
+
+  return {
+    access_token: session.access_token,
+    refresh_token: session.refresh_token,
+    user: {
+      id: session.user.id,
+      email: session.user.email ?? undefined,
+    },
+  };
+}
+
+function normalizeAuthResult(params: {
+  session: Session | null;
+  user: User | null;
+  error: { message?: string } | null;
+}): AuthResult {
+  return {
+    session: normalizeSession(params.session),
+    user: normalizeUser(params.user),
+    error: params.error ? { message: params.error.message } : undefined,
+  };
 }
 
 export async function signUpWithEmail(email: string, password: string): Promise<AuthResult> {
-  assertPublicConfig();
-
   try {
-    const response = await fetchWithTimeout(`${env.supabaseUrl}/auth/v1/signup`, {
-      method: "POST",
-      headers: {
-        ...authHeaders(),
-        Authorization: `Bearer ${env.supabaseAnonKey}`,
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    const client = createSupabaseAuthClient();
+    const { data, error } = await client.auth.signUp({ email, password });
 
-    return parseAuthResponse(response);
+    return normalizeAuthResult({
+      session: data.session,
+      user: data.user,
+      error,
+    });
   } catch {
     return { session: null, user: null, error: { message: "Supabase signup request timed out or failed" } };
   }
 }
 
 export async function loginWithEmail(email: string, password: string): Promise<AuthResult> {
-  assertPublicConfig();
-
   try {
-    const response = await fetchWithTimeout(`${env.supabaseUrl}/auth/v1/token?grant_type=password`, {
-      method: "POST",
-      headers: {
-        ...authHeaders(),
-        Authorization: `Bearer ${env.supabaseAnonKey}`,
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    const client = createSupabaseAuthClient();
+    const { data, error } = await client.auth.signInWithPassword({ email, password });
 
-    return parseAuthResponse(response);
+    return normalizeAuthResult({
+      session: data.session,
+      user: data.user,
+      error,
+    });
   } catch {
     return { session: null, user: null, error: { message: "Supabase login request timed out or failed" } };
   }
 }
 
 export async function getUserByAccessToken(accessToken: string) {
-  assertPublicConfig();
-
   try {
-    const response = await fetchWithTimeout(`${env.supabaseUrl}/auth/v1/user`, {
-      headers: {
-        ...authHeaders(),
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const client = createSupabaseAuthClient();
+    const { data, error } = await client.auth.getUser(accessToken);
 
-    if (!response.ok) return null;
-    return response.json();
+    if (error) return null;
+    return data.user;
   } catch {
     return null;
   }
@@ -114,7 +133,8 @@ export async function logout(accessToken: string) {
     {
       method: "POST",
       headers: {
-        ...authHeaders(),
+        apikey: env.supabaseAnonKey,
+        "Content-Type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
     },
