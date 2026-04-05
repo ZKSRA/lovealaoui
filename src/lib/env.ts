@@ -1,5 +1,3 @@
-import { env as cloudflareEnv } from "cloudflare:workers";
-
 type EnvKey =
   | "PUBLIC_SITE_URL"
   | "PUBLIC_SUPABASE_URL"
@@ -8,34 +6,23 @@ type EnvKey =
   | "STRIPE_SECRET_KEY"
   | "STRIPE_WEBHOOK_SECRET";
 
-const optional = (value: unknown) => (typeof value === "string" ? value.trim() : "");
-
-function readEnv(key: EnvKey) {
-  const runtimeValue = optional(cloudflareEnv?.[key as keyof typeof cloudflareEnv]);
-  const importMetaValue = optional(import.meta.env[key]);
-  const processValue = optional(typeof process !== "undefined" ? process.env?.[key] : undefined);
-
-  return runtimeValue || importMetaValue || processValue;
-}
 type RuntimeEnv = Partial<Record<EnvKey, string>>;
 
-const optional = (value: string | undefined) => value?.trim() ?? "";
+const optional = (value: unknown) => (typeof value === "string" ? value.trim() : "");
 
 let runtimeEnv: RuntimeEnv = {};
 
-/**
- * Called from middleware/routes when runtime bindings are available (e.g., Cloudflare Workers env).
- */
+// Called from middleware/routes when runtime bindings are available.
 export function setRuntimeEnv(bindings: RuntimeEnv | undefined) {
   runtimeEnv = bindings ?? {};
 }
 
 function readEnv(key: EnvKey) {
-  const runtimeValue = runtimeEnv[key] ?? "";
-  const importMetaValue = (import.meta.env[key] as string | undefined) ?? "";
-  const processValue = typeof process !== "undefined" ? process.env?.[key] ?? "" : "";
+  const runtimeValue = optional(runtimeEnv[key]);
+  const importMetaValue = optional(import.meta.env[key]);
+  const processValue = optional(typeof process !== "undefined" ? process.env?.[key] : undefined);
 
-  return optional(runtimeValue || importMetaValue || processValue || undefined);
+  return runtimeValue || importMetaValue || processValue;
 }
 
 export const env = {

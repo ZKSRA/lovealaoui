@@ -52,12 +52,3 @@ npm run check:package-json
 ```
 
 A GitHub Action also runs this check on push/PR.
-`PUBLIC_*` variables are consumed by server code through `import.meta.env` (and fallback to `process.env`), so they must be available in the Worker/build environment.
-
-
-Runtime note: in Worker SSR, bindings are read from runtime env first (via middleware), then fall back to build-time `import.meta.env` and finally `process.env`.
-
-
-## Package manager
-
-Use npm (not bun) for this repo. `package.json` pins `packageManager` to npm and uses npm `overrides` for Vite dependency stability.

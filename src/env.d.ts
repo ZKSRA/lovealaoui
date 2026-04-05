@@ -14,6 +14,10 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
+declare module "cloudflare:workers" {
+  export const env: Record<string, string | undefined>;
+}
+
 declare namespace App {
   interface Locals {
     user: {

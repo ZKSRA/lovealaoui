@@ -1,7 +1,8 @@
 import type { APIRoute } from "astro";
 import { setAuthCookies } from "@/lib/auth";
 import { hasSupabasePublicConfig } from "@/lib/env";
-import { signUpWithEmail } from "@/lib/supabase";
+import { getSafeNextPath, withQuery } from "@/lib/navigation";
+import { signUpWithEmail, type AuthResult } from "@/lib/supabase";
 
 export const prerender = false;
 
@@ -9,30 +10,25 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const formData = await request.formData();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
-  const next = String(formData.get("next") ?? "/my-deck");
+  const next = getSafeNextPath(String(formData.get("next") ?? "/my-deck"));
+  const redirectToSignup = (params: { error?: string; notice?: string }) =>
+    redirect(withQuery("/signup", { ...params, next }));
 
   if (!email || !password) {
-    return redirect("/signup?error=missing_fields");
+    return redirectToSignup({ error: "missing_fields" });
   }
 
   if (!hasSupabasePublicConfig()) {
     console.error("[signup] missing PUBLIC_SUPABASE_URL or PUBLIC_SUPABASE_ANON_KEY");
-    return redirect("/signup?error=missing_supabase_config");
+    return redirectToSignup({ error: "missing_supabase_config" });
   }
 
-  let result;
+  let result: AuthResult;
   try {
     result = await signUpWithEmail(email, password);
   } catch (error) {
     console.error("[signup] unexpected signup error", error);
-    return redirect("/signup?error=signup_unavailable");
-  }
-
-  if (result.error) {
-    console.error("[signup] signup_failed", result.error.message ?? "unknown_error");
-  if (result.error || !result.session) {
-    console.error("[signup] signup_failed", result.error?.message ?? "missing_session");
-    return redirect("/signup?error=signup_failed");
+    return redirectToSignup({ error: "signup_unavailable" });
   }
 
   if (result.session) {
@@ -42,8 +38,12 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
   // Supabase can return `user` with no `session` when email confirmation is required.
   if (result.user) {
-    return redirect("/signup?notice=check_email");
+    return redirectToSignup({ notice: "check_email" });
   }
 
-  return redirect("/signup?error=signup_failed");
+  if (result.error) {
+    console.error("[signup] signup_failed", result.error.message ?? "unknown_error");
+  }
+
+  return redirectToSignup({ error: "signup_failed" });
 };

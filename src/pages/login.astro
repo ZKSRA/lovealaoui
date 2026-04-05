@@ -1,11 +1,12 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+import { getSafeNextPath } from "@/lib/navigation";
 
 if (Astro.locals?.user) {
   return Astro.redirect("/account");
 }
 
-const next = Astro.url.searchParams.get("next") ?? "/my-deck";
+const next = getSafeNextPath(Astro.url.searchParams.get("next"));
 const errorCode = Astro.url.searchParams.get("error");
 
 const errorMessageMap: Record<string, string> = {
@@ -43,7 +44,7 @@ const errorMessage = errorCode ? errorMessageMap[errorCode] ?? "We couldn't sign
         </label>
         <button type="submit" class="mt-2 inline-flex h-11 w-full items-center justify-center rounded-full bg-base-900 text-sm font-medium text-white">Log in</button>
       </form>
-      <p class="mt-4 text-sm text-base-600">No account yet? <a class="underline" href="/signup">Create one</a></p>
+      <p class="mt-4 text-sm text-base-600">No account yet? <a class="underline" href={`/signup?next=${encodeURIComponent(next)}`}>Create one</a></p>
     </div>
   </section>
 </BaseLayout>
