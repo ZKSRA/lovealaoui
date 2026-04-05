@@ -2,7 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { DEFAULT_PRODUCT } from "@/lib/products";
 import { hasPurchase } from "@/lib/supabase";
-import { hasServerCommerceConfig } from "@/lib/env";
+import { hasCheckoutConfig, hasPurchaseValidationConfig } from "@/lib/env";
 
 const currentUser = Astro.locals?.user;
 
@@ -11,13 +11,15 @@ if (!currentUser) {
 }
 
 let purchased = false;
-let serverConfigured = hasServerCommerceConfig();
+let purchaseValidationConfigured = hasPurchaseValidationConfig();
+const checkoutConfigured = hasCheckoutConfig();
 
-if (serverConfigured) {
+if (purchaseValidationConfigured) {
   try {
     purchased = await hasPurchase(currentUser.id, DEFAULT_PRODUCT.slug);
-  } catch {
-    serverConfigured = false;
+  } catch (error) {
+    purchaseValidationConfigured = false;
+    console.error("[my-deck] purchase validation unavailable", error);
   }
 }
 ---
@@ -29,9 +31,9 @@ if (serverConfigured) {
       <p class="mt-2 text-sm text-base-600">Access purchased digital tools from this page.</p>
 
       {
-        !serverConfigured ? (
+        !purchaseValidationConfigured ? (
           <div class="mt-6 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-            Manual setup required: add `SUPABASE_SERVICE_ROLE_KEY` and `STRIPE_SECRET_KEY` to enable purchase validation.
+            Purchase validation is unavailable. Check `PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in Worker settings.
           </div>
         ) : purchased ? (
           <div class="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-5">
@@ -45,9 +47,16 @@ if (serverConfigured) {
           <div class="mt-6 rounded-2xl border border-base-200 bg-base-50 p-5">
             <h2 class="text-lg font-medium">You haven't purchased this deck yet.</h2>
             <p class="mt-2 text-sm text-base-700">Complete checkout to unlock it instantly in this account.</p>
+            {
+              !checkoutConfigured && (
+                <p class="mt-3 rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                  Checkout setup is incomplete. Add `STRIPE_SECRET_KEY` and `PUBLIC_SITE_URL` in Worker settings.
+                </p>
+              )
+            }
             <form method="post" action="/api/checkout" class="mt-4">
               <input type="hidden" name="productSlug" value={DEFAULT_PRODUCT.slug} />
-              <button type="submit" class="inline-flex h-11 items-center justify-center rounded-full bg-base-900 px-6 text-sm font-medium text-white">Buy {DEFAULT_PRODUCT.name} · $29</button>
+              <button type="submit" disabled={!checkoutConfigured} class="inline-flex h-11 items-center justify-center rounded-full bg-base-900 px-6 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50">Buy {DEFAULT_PRODUCT.name} · $29</button>
             </form>
           </div>
         )

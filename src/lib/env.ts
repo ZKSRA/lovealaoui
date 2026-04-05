@@ -47,5 +47,6 @@ export const env = {
 };
 
 export const hasSupabasePublicConfig = () => Boolean(env.supabaseUrl && env.supabaseAnonKey);
-export const hasServerCommerceConfig = () =>
+export const hasPurchaseValidationConfig = () => Boolean(env.supabaseUrl && env.supabaseServiceRoleKey);
+export const hasCheckoutConfig = () =>
   Boolean(env.supabaseUrl && env.supabaseServiceRoleKey && env.stripeSecretKey && env.publicSiteUrl);

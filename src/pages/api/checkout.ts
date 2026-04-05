@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import { DEFAULT_PRODUCT } from "@/lib/products";
 import { createCheckoutSession } from "@/lib/stripe";
-import { hasServerCommerceConfig } from "@/lib/env";
+import { hasCheckoutConfig } from "@/lib/env";
 
 export const prerender = false;
 
@@ -10,7 +10,7 @@ export const POST: APIRoute = async ({ request, locals, redirect }) => {
     return redirect("/login?next=/my-deck");
   }
 
-  if (!hasServerCommerceConfig()) {
+  if (!hasCheckoutConfig()) {
     return redirect("/my-deck?error=server_config_missing");
   }
 
