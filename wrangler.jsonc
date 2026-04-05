@@ -1,4 +1,10 @@
 {
   "name": "lovealaoui",
-  "compatibility_date": "2026-03-17"
+  "compatibility_date": "2026-03-17",
+  "observability": {
+    "logs": {
+      "enabled": true,
+      "invocation_logs": true
+    }
+  }
 }
