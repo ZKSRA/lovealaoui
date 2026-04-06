@@ -19,7 +19,7 @@ const user = Astro.locals?.user;
         {
           user ? (
             <>
-              <a href="/my-deck" class="rounded-full bg-base-900 px-3 py-1.5 text-white">My Deck</a>
+              <a href="/my-deck" class="rounded-full bg-base-900 px-3 py-1.5 text-white">My Rituals</a>
               <form method="post" action="/api/auth/logout">
                 <button class="rounded-full px-3 py-1.5 hover:bg-base-100" type="submit">Logout</button>
               </form>
@@ -27,7 +27,7 @@ const user = Astro.locals?.user;
           ) : (
             <>
               <a href="/login" class="rounded-full px-3 py-1.5 hover:bg-base-100">Login</a>
-              <a href="/signup?next=/my-deck" class="rounded-full bg-base-900 px-3 py-1.5 text-white">Get Deck</a>
+              <a href="/signup?next=/my-deck" class="rounded-full bg-base-900 px-3 py-1.5 text-white">Start With Mochi Mates</a>
             </>
           )
         }

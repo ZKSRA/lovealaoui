@@ -3,6 +3,10 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { DEFAULT_PRODUCT } from "@/lib/products";
 import { hasPurchase } from "@/lib/supabase";
 import { env, hasCheckoutConfig, hasPurchaseValidationConfig } from "@/lib/env";
+import hugPose from "@/images/mascots/mochi-mates/mochi-mallow-hug.png";
+import mochiListening from "@/images/mascots/mochi-mates/mochi-listening.png";
+import mallowHeart from "@/images/mascots/mochi-mates/mallow-heart.png";
+import mallowReady from "@/images/mascots/mochi-mates/mallow-ready.png";
 
 const currentUser = Astro.locals?.user;
 
@@ -39,45 +43,219 @@ if (purchaseValidationConfigured) {
     console.error("[my-deck] purchase validation unavailable", error);
   }
 }
+
+const ritualPaths = [
+  {
+    title: "Quick reconnect",
+    detail: "A 5-minute reset for nights when you want warmth without pressure.",
+    image: mochiListening,
+    alt: "Mochi listening closely",
+    time: "5 min",
+  },
+  {
+    title: "Date-night spark",
+    detail: "Playful prompts for nights when you want closeness, chemistry, and a little softness.",
+    image: mallowHeart,
+    alt: "Mallow holding a heart",
+    time: "10 min",
+  },
+  {
+    title: "Weekly check-in",
+    detail: "A calmer ritual for reflecting, naming needs, and ending with one tiny promise.",
+    image: mallowReady,
+    alt: "Mallow ready to begin",
+    time: "15 min",
+  },
+];
+
+const starterPrompts = [
+  {
+    eyebrow: "Tonight's gentle start",
+    title: "What helped you feel most cared for by me this week?",
+    detail: "Answer in one sentence each, then ask one follow-up.",
+  },
+  {
+    eyebrow: "Reset after a long week",
+    title: "What are we carrying into tonight that we don't want to keep carrying?",
+    detail: "Name it softly, then choose one tiny way to make the week feel lighter.",
+  },
+  {
+    eyebrow: "Future ritual",
+    title: "What would make next week feel a little more us?",
+    detail: "End by choosing one small thing to protect together.",
+  },
+];
+
+const progressStats = purchased
+  ? [
+      { label: "Ritual status", value: "Unlocked" },
+      { label: "Suggested tonight", value: "Quick reconnect" },
+      { label: "Start size", value: "3 starter paths" },
+    ]
+  : [
+      { label: "Ritual status", value: "Preview" },
+      { label: "Unlocks instantly", value: DEFAULT_PRODUCT.name },
+      { label: "Start size", value: "3 starter paths" },
+    ];
 ---
 
 <BaseLayout>
-  <section class="mx-auto max-w-3xl py-12">
-    <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-base-100 sm:p-8">
-      <h1 class="text-2xl font-semibold">My Deck</h1>
-      <p class="mt-2 text-sm text-base-600">Access purchased digital tools from this page.</p>
+  <section class="mx-auto max-w-5xl py-12 space-y-6">
+    {
+      !purchaseValidationConfigured && (
+        <div class="rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
+          {purchaseValidationMessage}
+        </div>
+      )
+    }
 
-      {
-        !purchaseValidationConfigured ? (
-          <div class="mt-6 rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
-            {purchaseValidationMessage}
-          </div>
-        ) : purchased ? (
-          <div class="mt-6 rounded-2xl border border-rose-200 bg-rose-50 p-5">
-            <h2 class="text-lg font-medium">{DEFAULT_PRODUCT.name}</h2>
-            <p class="mt-2 text-sm text-base-700">You're unlocked ✅. This is your protected content area.</p>
-            <div class="mt-4 rounded-xl bg-white p-4 text-sm ring-1 ring-base-200">
-              Placeholder: replace this block with the real deck viewer/app embed.
-            </div>
-          </div>
-        ) : (
-          <div class="mt-6 rounded-2xl border border-base-200 bg-base-50 p-5">
-            <h2 class="text-lg font-medium">You haven't purchased this deck yet.</h2>
-            <p class="mt-2 text-sm text-base-700">Complete checkout to unlock it instantly in this account.</p>
+    <div class="overflow-hidden rounded-[2rem] bg-white shadow-sm ring-1 ring-base-100">
+      <div class="grid gap-0 lg:grid-cols-[1.05fr_.95fr]">
+        <div class="space-y-5 px-6 py-7 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
+          <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">My Rituals</p>
+          <h1 class="max-w-[12ch] text-[clamp(2rem,5vw,3.4rem)] font-semibold leading-[0.98] text-base-900">
+            {purchased ? "Welcome back to Mochi Mates." : "Preview your ritual home."}
+          </h1>
+          <p class="max-w-2xl text-sm leading-relaxed text-base-700">
             {
-              !checkoutConfigured && (
-                <p class="mt-3 rounded-xl border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
-                  Checkout setup is incomplete. Add `STRIPE_SECRET_KEY` and `PUBLIC_SITE_URL` in Worker settings.
-                </p>
+              purchased
+                ? `Your account is ready for ${DEFAULT_PRODUCT.name}. Start with a gentle path tonight, save the prompts you love, and let connection feel easier to return to.`
+                : `This is where ${DEFAULT_PRODUCT.name} lives after purchase. Unlock it to get your starter rituals, weekly check-ins, and a soft place to come back to together.`
+            }
+          </p>
+
+          <div class="flex flex-wrap gap-3">
+            {
+              purchased ? (
+                <a href="#start-tonight" class="inline-flex h-11 items-center justify-center rounded-full bg-base-900 px-6 text-sm font-medium text-white transition hover:bg-base-800">
+                  Start tonight's ritual
+                </a>
+              ) : (
+                <form method="post" action="/api/checkout">
+                  <input type="hidden" name="productSlug" value={DEFAULT_PRODUCT.slug} />
+                  <button type="submit" disabled={!checkoutConfigured} class="inline-flex h-11 items-center justify-center rounded-full bg-base-900 px-6 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50">
+                    Unlock {DEFAULT_PRODUCT.name} · $29
+                  </button>
+                </form>
               )
             }
-            <form method="post" action="/api/checkout" class="mt-4">
-              <input type="hidden" name="productSlug" value={DEFAULT_PRODUCT.slug} />
-              <button type="submit" disabled={!checkoutConfigured} class="inline-flex h-11 items-center justify-center rounded-full bg-base-900 px-6 text-sm font-medium text-white disabled:cursor-not-allowed disabled:opacity-50">Buy {DEFAULT_PRODUCT.name} · $29</button>
-            </form>
+            <a href="#starter-prompts" class="inline-flex h-11 items-center justify-center rounded-full border border-base-300 bg-base-50 px-6 text-sm font-medium text-base-900 transition hover:bg-base-100">
+              See starter prompts
+            </a>
           </div>
-        )
-      }
+
+          <div class="grid gap-3 sm:grid-cols-3">
+            {progressStats.map((stat) => (
+              <article class="rounded-2xl bg-base-50 px-4 py-4 ring-1 ring-base-100">
+                <p class="text-xs uppercase tracking-[0.18em] text-base-500">{stat.label}</p>
+                <p class="mt-2 text-lg font-medium text-base-900">{stat.value}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div class="bg-[radial-gradient(circle_at_top,_rgba(255,237,238,.95),_rgba(255,248,244,.9)_38%,_rgba(250,247,244,.95)_100%)] px-6 py-7 sm:px-8 sm:py-8 lg:px-8 lg:py-10">
+          <div class="relative mx-auto flex h-full min-h-[20rem] max-w-[24rem] items-center justify-center rounded-[2rem] border border-white/70 bg-white/70 p-6 shadow-[0_20px_70px_rgba(104,74,74,0.12)]">
+            <img src={hugPose.src} alt="Mochi and Mallow hugging" class="w-[80%] max-w-[20rem] object-contain drop-shadow-[0_20px_30px_rgba(71,46,46,0.16)]" />
+            <div class="absolute bottom-5 left-5 max-w-[13rem] rounded-3xl bg-white/92 p-4 shadow-lg ring-1 ring-rose-100">
+              <p class="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-rose-700">Mochi Mates</p>
+              <p class="mt-2 text-sm leading-relaxed text-base-800">
+                {purchased ? "Mochi starts gently. Mallow keeps it moving. You bring the honesty." : "This becomes your ritual home the moment your deck unlocks."}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <section id="start-tonight" class="grid gap-4 lg:grid-cols-[1.05fr_.95fr]">
+      <div class="rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-base-100 sm:p-8">
+        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Start tonight</p>
+        <h2 class="mt-2 text-2xl font-semibold text-base-900">
+          {purchased ? "Choose the kind of closeness you need." : "Preview the paths waiting inside."}
+        </h2>
+        <p class="mt-3 text-sm leading-relaxed text-base-700">
+          {purchased ? "You do not need a perfect evening. Pick one path, answer one prompt, and let that be enough to start." : "Every deck begins with a few easy entry points so you never have to wonder how to begin."}
+        </p>
+
+        <div class="mt-5 grid gap-3 sm:grid-cols-3">
+          {ritualPaths.map((path) => (
+            <article class="rounded-3xl bg-gradient-to-b from-white to-rose-50 p-4 ring-1 ring-rose-100">
+              <img src={path.image.src} alt={path.alt} class="h-16 w-16 rounded-full bg-white p-2 ring-1 ring-rose-100" loading="lazy" />
+              <p class="mt-4 text-xs uppercase tracking-[0.16em] text-rose-700">{path.time}</p>
+              <h3 class="mt-2 text-base font-medium text-base-900">{path.title}</h3>
+              <p class="mt-2 text-sm leading-relaxed text-base-600">{path.detail}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <div class="rounded-[2rem] bg-base-50 p-6 ring-1 ring-base-100 sm:p-8">
+        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">How this works</p>
+        <h2 class="mt-2 text-2xl font-semibold text-base-900">A simple ritual in three steps.</h2>
+        <ol class="mt-5 space-y-4 text-sm text-base-700">
+          <li>
+            <span class="font-medium text-base-900">1. Pick your mood.</span> Choose whether you need a quick reconnect, a date-night spark, or a deeper check-in.
+          </li>
+          <li>
+            <span class="font-medium text-base-900">2. Draw one prompt.</span> Read it out loud, answer honestly, then ask one soft follow-up.
+          </li>
+          <li>
+            <span class="font-medium text-base-900">3. End with one tiny promise.</span> Keep it small enough that it actually changes the next few days.
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section id="starter-prompts" class="rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-base-100 sm:p-8">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Starter prompts</p>
+          <h2 class="mt-2 text-2xl font-semibold text-base-900">Begin with something gentle and real.</h2>
+        </div>
+        {!purchased && <p class="max-w-sm text-sm text-base-600">Unlock the deck to turn these previews into a ritual home you can return to any night.</p>}
+      </div>
+
+      <div class="mt-5 grid gap-3 lg:grid-cols-3">
+        {starterPrompts.map((prompt) => (
+          <article class="rounded-3xl bg-gradient-to-b from-white to-rose-50 p-5 ring-1 ring-rose-100">
+            <p class="text-xs uppercase tracking-[0.2em] text-rose-700">{prompt.eyebrow}</p>
+            <h3 class="mt-3 text-base font-medium text-base-900">{prompt.title}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-base-600">{prompt.detail}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="grid gap-4 lg:grid-cols-[1.02fr_.98fr]">
+      <div class="rounded-[2rem] bg-base-50 p-6 ring-1 ring-base-100 sm:p-8">
+        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Deck overview</p>
+        <h2 class="mt-2 text-2xl font-semibold text-base-900">{DEFAULT_PRODUCT.name}</h2>
+        <p class="mt-3 text-sm leading-relaxed text-base-700">{DEFAULT_PRODUCT.description}</p>
+        <div class="mt-5 grid gap-3 sm:grid-cols-2">
+          <div class="rounded-2xl bg-white px-4 py-4 ring-1 ring-base-100">
+            <p class="text-xs uppercase tracking-[0.16em] text-base-500">Best for</p>
+            <p class="mt-2 text-sm font-medium text-base-900">Date nights, weekly check-ins, and reset evenings</p>
+          </div>
+          <div class="rounded-2xl bg-white px-4 py-4 ring-1 ring-base-100">
+            <p class="text-xs uppercase tracking-[0.16em] text-base-500">Feel</p>
+            <p class="mt-2 text-sm font-medium text-base-900">Playful, calm, reflective, and easy to revisit</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-base-100 sm:p-8">
+        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Mochi &amp; Mallow tip</p>
+        <h2 class="mt-2 text-2xl font-semibold text-base-900">Two minutes still counts.</h2>
+        <p class="mt-3 text-sm leading-relaxed text-base-700">
+          The goal is not to do this perfectly. The goal is to create a tiny opening for honesty, care, and closeness more often than you would without it.
+        </p>
+        <div class="mt-5 rounded-3xl bg-gradient-to-r from-rose-50 to-amber-50 p-4 ring-1 ring-rose-100">
+          <p class="text-sm leading-relaxed text-base-800">
+            <span class="font-medium">Mochi says:</span> start smaller than you think. <span class="font-medium">Mallow says:</span> if one card makes you smile and talk for five extra minutes, the ritual worked.
+          </p>
+        </div>
+      </div>
+    </section>
   </section>
 </BaseLayout>

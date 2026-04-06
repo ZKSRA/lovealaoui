@@ -1,45 +1,74 @@
 ---
+import { DEFAULT_PRODUCT } from "@/lib/products";
+import heroScene from "@/images/mascots/mochi-mates/mochi-mallow-hero-scene.png";
+import hugPose from "@/images/mascots/mochi-mates/mochi-mallow-hug.png";
+import mochiSmile from "@/images/mascots/mochi-mates/mochi-shy-smile.png";
+import mallowHeart from "@/images/mascots/mochi-mates/mallow-heart.png";
+import mochiListening from "@/images/mascots/mochi-mates/mochi-listening.png";
+import mallowReady from "@/images/mascots/mochi-mates/mallow-ready.png";
+
 const featuredProduct = {
-  name: "Couples Conversation Deck",
-  subtitle: "120 guided prompts for date nights, weekly check-ins, and everyday connection.",
+  name: DEFAULT_PRODUCT.name,
+  subtitle: "120 guided prompts for date nights, weekly check-ins, and everyday moments that deserve more care.",
   price: "$29",
-  supporting: "One-time purchase · Instant access",
+  supporting: "One-time purchase · Instant access · Yours to revisit any time",
   highlights: [
-    "Playful, reflective, and future-focused cards",
-    "Quick 5-minute mode + longer date-night flow",
-    "Save favorite prompts and reuse every week",
+    "5-minute check-ins and slower date-night rituals in one deck",
+    "A calm, phone-first experience designed to feel premium and easy",
+    "Save favourites and build a connection routine you actually return to",
   ],
 };
 
-const trustBadges = ["Instant digital access", "Phone-first design", "Long-distance friendly"];
+const trustBadges = ["Instant digital access", "Made for phones", "Long-distance friendly"];
+
+const ritualModes = [
+  {
+    title: "Soft check-in",
+    detail: "Mochi helps you start gently when you want closeness without pressure.",
+    image: mochiSmile,
+    alt: "Mochi smiling shyly",
+  },
+  {
+    title: "Date-night spark",
+    detail: "Mallow brings playful momentum when you want the night to feel intentional.",
+    image: mallowHeart,
+    alt: "Mallow holding a heart",
+  },
+  {
+    title: "Listen deeper",
+    detail: "Use the deck to slow down, ask better questions, and hear each other clearly.",
+    image: mochiListening,
+    alt: "Mochi listening with headphones",
+  },
+];
 
 const howItWorks = [
   {
-    title: "Discover",
-    desc: "You find a deck from TikTok and land here in seconds.",
+    title: "Meet Mochi Mates",
+    desc: "Land here, feel the vibe fast, and see exactly how Love Alaoui turns connection into a tiny ritual.",
   },
   {
-    title: "Buy",
-    desc: "Checkout once and get your private link right away by email.",
+    title: "Unlock your deck",
+    desc: "Create your account once, check out securely, and open your deck in your private space right away.",
   },
   {
-    title: "Use together",
-    desc: "Open on your phones, take turns, and build a ritual that feels natural.",
+    title: "Come back often",
+    desc: "Use it for quick nightly check-ins, slower weekend conversations, or whenever you want to reset together.",
   },
 ];
 
 const benefits = [
   {
-    title: "Closer conversations",
-    desc: "Prompts are thoughtful and simple, so you can connect without awkward starts.",
+    title: "Less awkward starting",
+    desc: "The prompts help you skip stale small talk and step into something warmer, faster.",
   },
   {
-    title: "Intentional quality time",
-    desc: "Turn ordinary evenings into meaningful check-ins you can actually sustain.",
+    title: "A ritual you can sustain",
+    desc: "It is designed for real life, whether you have five minutes on the sofa or a full date-night window.",
   },
   {
-    title: "Easy to come back to",
-    desc: "Use the same deck again and again for date night, reset moments, or weekly reflection.",
+    title: "Premium but easy",
+    desc: "The whole experience should feel soft, thoughtful, and beautiful without becoming complicated.",
   },
 ];
 
@@ -47,31 +76,31 @@ const productPreviews = [
   {
     label: "Tonight's card",
     title: "What made you feel most supported by me this week?",
-    detail: "Add one follow-up and switch turns.",
+    detail: "Answer, add one follow-up, then swap turns.",
   },
   {
-    label: "Date-night mode",
-    title: "Pick a vibe: playful, deeper, or future plans",
-    detail: "The deck adapts to your mood in one tap.",
+    label: "Reset mode",
+    title: "What are we carrying into tonight that we don't want to keep carrying?",
+    detail: "A gentle way to reset before things turn into distance.",
   },
   {
-    label: "Weekly check-in",
-    title: "Connection score: where are we today?",
-    detail: "End with one tiny action for the week ahead.",
+    label: "Future mode",
+    title: "What would make next week feel softer, lighter, or more us?",
+    detail: "End with one tiny promise you can actually keep.",
   },
 ];
 
 const testimonials = [
   {
-    quote: "Our evenings feel calmer now. We talk with more care instead of defaulting to small talk.",
+    quote: "It feels cute, but not childish. We actually use it when we want to reconnect without making a whole thing of it.",
     author: "A + J · serious dating",
   },
   {
-    quote: "Beautifully simple. It made our Sunday check-in feel intentional, not forced.",
+    quote: "The prompts gave us a rhythm. It turned our Sunday check-in into something we look forward to.",
     author: "M + R · married",
   },
   {
-    quote: "Perfect for date night when we want closeness without overplanning.",
+    quote: "This felt more like entering a relationship ritual than buying another PDF.",
     author: "K + D · engaged",
   },
 ];
@@ -79,55 +108,54 @@ const testimonials = [
 const faqs = [
   {
     q: "Is this a physical product?",
-    a: "No. Everything is digital and delivered instantly after checkout.",
+    a: "No. Love Alaoui is a digital experience you unlock online and revisit whenever you want.",
   },
   {
     q: "How do we access it?",
-    a: "You'll receive a private link by email right after purchase.",
+    a: "You sign in to your account and open your private deck inside My Deck after purchase.",
   },
   {
     q: "Can we use it on our phones?",
-    a: "Yes. It's designed mobile-first with tap-friendly cards and clear spacing.",
+    a: "Yes. The experience is designed mobile-first so it feels natural on the sofa, at dinner, or from long distance.",
   },
   {
-    q: "Is it good for date night?",
-    a: "Absolutely. It's built for date nights, quick weekday check-ins, and everything in between.",
+    q: "Who is it for?",
+    a: "Serious dating, engaged, married, and long-distance couples who want better conversations without pressure or therapy-speak.",
   },
   {
-    q: "Is it suitable for married / engaged / serious couples?",
-    a: "Yes. The prompts are designed for committed couples across different stages.",
+    q: "When should we use it?",
+    a: "Date nights, weekly check-ins, after a tense week, or any evening when you want to feel more intentional together.",
   },
 ];
 ---
 
 <div class="space-y-10 py-6 pb-24 sm:space-y-12 sm:py-8 lg:space-y-16 lg:py-10">
-  <section class="rounded-2xl border border-rose-200/70 bg-rose-50/80 px-4 py-3 text-center shadow-sm sm:px-6">
-    <p class="text-xs font-medium tracking-wide text-base-800">
-      New: <span class="text-rose-700">Weekend Connection Pack</span> included this month
+  <section class="rounded-2xl border border-rose-200/70 bg-gradient-to-r from-rose-50 via-white to-amber-50 px-4 py-3 text-center shadow-sm sm:px-6">
+    <p class="text-xs font-medium tracking-[0.18em] text-base-800 uppercase">
+      Meet <span class="text-rose-700">Mochi Mates</span> · the soft little world behind Love Alaoui
     </p>
   </section>
 
-  <section class="rounded-[2rem] bg-white/95 p-5 shadow-sm ring-1 ring-base-100 sm:p-7 lg:p-10" aria-labelledby="hero-title">
-    <div class="grid items-center gap-6 lg:grid-cols-[1.05fr_.95fr] lg:gap-8">
-      <div class="space-y-5">
-        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Digital tools for couples</p>
-        <h1 id="hero-title" class="text-[clamp(2rem,8vw,3.65rem)] font-semibold leading-[1.04] text-base-900">
-          Better conversations.<br />
-          More connected nights.
+  <section class="overflow-hidden rounded-[2rem] bg-white/95 shadow-sm ring-1 ring-base-100" aria-labelledby="hero-title">
+    <div class="grid items-stretch gap-0 lg:grid-cols-[1.02fr_.98fr]">
+      <div class="space-y-5 px-5 py-7 sm:px-7 sm:py-8 lg:px-10 lg:py-10">
+        <p class="text-xs font-medium uppercase tracking-[0.24em] text-rose-700">Meet Mochi &amp; Mallow</p>
+        <h1 id="hero-title" class="max-w-[10ch] text-[clamp(1.95rem,4.8vw,3.15rem)] font-semibold leading-[0.98] text-base-900">
+          Closer nights. Better conversations. Softer rituals.
         </h1>
-        <p class="max-w-xl text-[0.98rem] leading-relaxed text-base-700">
-          A soft, premium collection of mobile-first relationship tools that help you create intentional quality time in minutes.
+        <p class="max-w-[33rem] text-[0.98rem] leading-relaxed text-base-700">
+          Love Alaoui turns connection into a gentle routine you will actually want to keep. Start with {featuredProduct.name}, a premium digital deck for date nights, weekly check-ins, and everyday reconnection.
         </p>
 
         <div class="flex flex-wrap gap-3">
           <a
-            href="#featured-product"
+            href="/signup?next=/my-deck"
             class="inline-flex h-11 items-center justify-center rounded-full bg-base-900 px-6 text-sm font-medium text-white transition hover:bg-base-800"
-          >Get the Conversation Deck</a>
+          >Get {featuredProduct.name}</a>
           <a
-            href="#preview"
+            href="#how-it-works"
             class="inline-flex h-11 items-center justify-center rounded-full border border-base-300 bg-base-50 px-6 text-sm font-medium text-base-900 transition hover:bg-base-100"
-          >See the preview</a>
+          >See how it works</a>
         </div>
 
         <ul class="grid gap-2 text-xs text-base-700 sm:grid-cols-3 sm:gap-3" aria-label="Trust badges">
@@ -135,20 +163,36 @@ const faqs = [
             <li class="rounded-full bg-base-50 px-3 py-1.5 ring-1 ring-base-200">✓ {badge}</li>
           ))}
         </ul>
+
+        <div class="grid gap-3 sm:grid-cols-3">
+          {ritualModes.map((mode) => (
+            <article class="rounded-3xl bg-gradient-to-b from-rose-50 to-white p-4 ring-1 ring-rose-100">
+              <div class="flex items-center gap-3">
+                <img src={mode.image.src} alt={mode.alt} class="h-14 w-14 shrink-0 object-contain" loading="lazy" />
+                <div>
+                  <h2 class="text-sm font-medium text-base-900">{mode.title}</h2>
+                  <p class="mt-1 text-xs leading-relaxed text-base-600">{mode.detail}</p>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </div>
 
-      <div class="rounded-3xl bg-gradient-to-br from-rose-100/70 via-rose-50 to-base-50 p-4 shadow-inner ring-1 ring-rose-100 sm:p-5">
-        <div class="mx-auto max-w-sm space-y-3 rounded-3xl bg-white p-4 shadow-sm ring-1 ring-base-100">
-          <p class="text-xs font-medium uppercase tracking-widest text-rose-700">Conversation Card</p>
-          <p class="rounded-2xl bg-base-50 p-4 text-sm leading-relaxed text-base-800">
-            “What's one thing we can do this week to feel a little more connected?”
-          </p>
-          <div class="flex items-center justify-between text-xs text-base-600">
-            <span>Card 34 of 120</span>
-            <span>Swipe for next →</span>
+      <div class="relative overflow-hidden bg-[radial-gradient(circle_at_top,_rgba(255,235,236,.95),_rgba(255,248,244,.85)_38%,_rgba(250,247,244,.95)_100%)] px-5 py-6 sm:px-7 sm:py-8 lg:px-8 lg:py-8">
+        <div class="relative mx-auto aspect-[5/6] w-full max-w-[25rem] rounded-[2.5rem] border border-white/70 bg-white/65 shadow-[0_20px_70px_rgba(104,74,74,0.12)] backdrop-blur-sm lg:max-w-[28rem]">
+          <img src={heroScene.src} alt="Mochi and Mallow cuddling together" class="absolute inset-0 h-full w-full object-cover object-center opacity-80" />
+          <div class="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-white/95 via-white/25 to-transparent"></div>
+          <div class="absolute inset-0 flex items-center justify-center px-6 pt-10">
+            <img src={hugPose.src} alt="Mochi and Mallow hugging" class="w-[82%] max-w-[22rem] object-contain drop-shadow-[0_20px_34px_rgba(71,46,46,0.15)]" />
           </div>
-          <div class="rounded-2xl bg-rose-50 px-3 py-2 text-xs text-rose-800 ring-1 ring-rose-100">
-            Includes weekly check-ins + date-night modes
+          <img src={mochiSmile.src} alt="Mochi smiling" class="absolute left-3 top-5 w-20 rotate-[-9deg] object-contain rounded-full bg-white/80 p-2 shadow-sm ring-1 ring-rose-100 sm:w-24" loading="lazy" />
+          <img src={mallowHeart.src} alt="Mallow holding a heart" class="absolute right-4 top-8 w-20 rotate-[10deg] object-contain rounded-full bg-white/80 p-2 shadow-sm ring-1 ring-rose-100 sm:w-24" loading="lazy" />
+          <div class="absolute bottom-4 left-4 max-w-[13rem] rounded-3xl bg-white/92 p-4 shadow-lg ring-1 ring-rose-100 sm:bottom-5 sm:left-5">
+            <p class="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-rose-700">Mochi Mates</p>
+            <p class="mt-2 text-sm leading-relaxed text-base-800">
+              Tiny guides for softer check-ins, date-night sparks, and conversations that feel more like you.
+            </p>
           </div>
         </div>
       </div>
@@ -158,7 +202,7 @@ const faqs = [
   <section id="featured-product" class="rounded-[2rem] bg-base-50 p-5 ring-1 ring-base-100 sm:p-7 lg:p-10" aria-labelledby="featured-heading">
     <div class="flex flex-wrap items-start justify-between gap-4">
       <div class="max-w-2xl">
-        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Featured product</p>
+        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Start here</p>
         <h2 id="featured-heading" class="mt-2 text-[clamp(1.55rem,4vw,2.2rem)] font-semibold text-base-900">{featuredProduct.name}</h2>
         <p class="mt-2 text-sm text-base-700">{featuredProduct.subtitle}</p>
       </div>
@@ -169,24 +213,40 @@ const faqs = [
       </div>
     </div>
 
-    <ul class="mt-5 space-y-2 text-sm text-base-800">
-      {featuredProduct.highlights.map((item) => <li>• {item}</li>)}
-    </ul>
+    <div class="mt-6 grid gap-5 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
+      <div>
+        <ul class="space-y-2 text-sm text-base-800">
+          {featuredProduct.highlights.map((item) => <li>• {item}</li>)}
+        </ul>
 
-    <div class="mt-5 grid gap-3 sm:grid-cols-2">
-      <a
-        href="/signup?next=/my-deck"
-        class="inline-flex h-11 items-center justify-center rounded-full bg-rose-700 px-5 text-sm font-medium text-white transition hover:bg-rose-800"
-      >Buy now · {featuredProduct.price}</a>
-      <a
-        href="#faq"
-        class="inline-flex h-11 items-center justify-center rounded-full border border-base-300 bg-white px-5 text-sm font-medium text-base-900 transition hover:bg-base-50"
-      >Read FAQ first</a>
+        <div class="mt-5 grid gap-3 sm:grid-cols-2">
+          <a
+            href="/signup?next=/my-deck"
+            class="inline-flex h-11 items-center justify-center rounded-full bg-rose-700 px-5 text-sm font-medium text-white transition hover:bg-rose-800"
+          >Unlock the deck · {featuredProduct.price}</a>
+          <a
+            href="#preview"
+            class="inline-flex h-11 items-center justify-center rounded-full border border-base-300 bg-white px-5 text-sm font-medium text-base-900 transition hover:bg-base-50"
+          >Preview the ritual</a>
+        </div>
+      </div>
+
+      <div class="rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-base-100">
+        <div class="flex items-center gap-4">
+          <img src={mallowReady.src} alt="Mallow ready to begin" class="h-20 w-20 object-contain rounded-full bg-rose-50 p-3 ring-1 ring-rose-100" loading="lazy" />
+          <div>
+            <p class="text-xs font-medium uppercase tracking-[0.2em] text-rose-700">Why this works</p>
+            <p class="mt-2 text-sm leading-relaxed text-base-700">
+              You are not buying a pile of prompts. You are unlocking a relationship ritual that makes connection easier to start and easier to repeat.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section id="how-it-works" class="space-y-4" aria-labelledby="how-heading">
-    <h2 id="how-heading" class="text-[clamp(1.45rem,3.5vw,2rem)] font-semibold text-base-900">How it works</h2>
+    <h2 id="how-heading" class="text-[clamp(1.45rem,3.5vw,2rem)] font-semibold text-base-900">How Mochi Mates fits into your week</h2>
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
       {howItWorks.map((step, index) => (
         <article class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-base-100">
@@ -199,7 +259,13 @@ const faqs = [
   </section>
 
   <section class="space-y-4 rounded-[2rem] bg-white p-5 shadow-sm ring-1 ring-base-100 sm:p-7 lg:p-8" aria-labelledby="benefits-heading">
-    <h2 id="benefits-heading" class="text-[clamp(1.45rem,3.5vw,2rem)] font-semibold text-base-900">Why couples keep using it</h2>
+    <div class="flex items-center justify-between gap-4">
+      <div>
+        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">What changes</p>
+        <h2 id="benefits-heading" class="mt-2 text-[clamp(1.45rem,3.5vw,2rem)] font-semibold text-base-900">Why couples keep coming back</h2>
+      </div>
+      <img src={mochiListening.src} alt="Mochi listening closely" class="hidden h-20 w-20 rounded-full bg-rose-50 p-3 ring-1 ring-rose-100 sm:block" loading="lazy" />
+    </div>
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
       {benefits.map((benefit) => (
         <article class="rounded-2xl bg-base-50 p-5 ring-1 ring-base-100">
@@ -211,9 +277,9 @@ const faqs = [
   </section>
 
   <section id="preview" class="space-y-4" aria-labelledby="preview-heading">
-    <h2 id="preview-heading" class="text-[clamp(1.45rem,3.5vw,2rem)] font-semibold text-base-900">Product preview</h2>
-    <p class="max-w-xl text-[0.98rem] leading-relaxed text-base-700">
-      Designed like a mini app experience: calm interface, smooth hierarchy, and cards that feel premium on mobile.
+    <h2 id="preview-heading" class="text-[clamp(1.45rem,3.5vw,2rem)] font-semibold text-base-900">Inside the ritual</h2>
+    <p class="max-w-2xl text-[0.98rem] leading-relaxed text-base-700">
+      The deck is designed like a calm mini-app: a clear question, one thoughtful follow-up, and a tiny closing action that helps the feeling last longer than the moment.
     </p>
     <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
       {productPreviews.map((card) => (
@@ -227,7 +293,7 @@ const faqs = [
   </section>
 
   <section class="space-y-4 rounded-[2rem] bg-base-50 p-5 ring-1 ring-base-100 sm:p-7 lg:p-8" aria-labelledby="social-proof-heading">
-    <h2 id="social-proof-heading" class="text-[clamp(1.45rem,3.5vw,2rem)] font-semibold text-base-900">Loved by couples</h2>
+    <h2 id="social-proof-heading" class="text-[clamp(1.45rem,3.5vw,2rem)] font-semibold text-base-900">Loved by couples who want something softer</h2>
     <div class="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
       {testimonials.map((item) => (
         <blockquote class="rounded-2xl bg-white p-5 shadow-sm ring-1 ring-base-100">
@@ -252,11 +318,11 @@ const faqs = [
 
   <section id="final-cta" class="rounded-[2rem] bg-base-900 px-5 py-10 text-center text-white sm:px-7 lg:px-10" aria-labelledby="final-cta-heading">
     <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-200">Ready to feel closer this week?</p>
-    <h2 id="final-cta-heading" class="mx-auto mt-3 max-w-xl text-[clamp(1.45rem,4vw,2.1rem)] font-semibold leading-tight">
-      Start with one deck and make connection part of your routine.
+    <h2 id="final-cta-heading" class="mx-auto mt-3 max-w-2xl text-[clamp(1.45rem,4vw,2.25rem)] font-semibold leading-tight">
+      Let Mochi &amp; Mallow guide your first ritual tonight.
     </h2>
-    <p class="mx-auto mt-3 max-w-xl text-sm text-rose-100">
-      Thoughtful prompts, beautiful mobile flow, and meaningful conversations you can revisit any time.
+    <p class="mx-auto mt-3 max-w-2xl text-sm text-rose-100">
+      Start with {featuredProduct.name} and turn one quiet evening into the beginning of a better routine together.
     </p>
     <a
       href="/signup?next=/my-deck"
@@ -269,5 +335,5 @@ const faqs = [
   <a
     href="/signup?next=/my-deck"
     class="inline-flex h-11 w-full items-center justify-center rounded-full bg-base-900 px-6 text-sm font-medium text-white"
-  >Get the Deck · {featuredProduct.price}</a>
+  >Start with Mochi Mates · {featuredProduct.price}</a>
 </div>
