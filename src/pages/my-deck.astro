@@ -2,7 +2,7 @@
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { DEFAULT_PRODUCT } from "@/lib/products";
 import { hasPurchase } from "@/lib/supabase";
-import { hasCheckoutConfig, hasPurchaseValidationConfig } from "@/lib/env";
+import { env, hasCheckoutConfig, hasPurchaseValidationConfig } from "@/lib/env";
 
 const currentUser = Astro.locals?.user;
 
@@ -17,8 +17,16 @@ let purchaseValidationMessage =
   "Purchase validation is unavailable. Check `PUBLIC_SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in Worker settings.";
 
 if (!purchaseValidationConfigured) {
+  const missingKeys = [
+    !env.supabaseUrl ? "PUBLIC_SUPABASE_URL" : null,
+    !env.supabaseServiceRoleKey ? "SUPABASE_SERVICE_ROLE_KEY" : null,
+  ].filter(Boolean);
+  const missingLabel = missingKeys.join(" and ");
+
   purchaseValidationMessage =
-    "Purchase validation is unavailable because `PUBLIC_SUPABASE_URL` or `SUPABASE_SERVICE_ROLE_KEY` is missing in Worker settings.";
+    missingKeys.length > 0
+      ? `Purchase validation is unavailable because ${missingLabel} ${missingKeys.length === 1 ? "is" : "are"} missing in Worker settings.`
+      : "Purchase validation is unavailable because the Worker runtime config could not be read.";
 }
 
 if (purchaseValidationConfigured) {
