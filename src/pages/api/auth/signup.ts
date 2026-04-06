@@ -6,6 +6,11 @@ import { signUpWithEmail, type AuthResult } from "@/lib/supabase";
 
 export const prerender = false;
 
+export const GET: APIRoute = async ({ redirect, url }) => {
+  const next = getSafeNextPath(url.searchParams.get("next"));
+  return redirect(withQuery("/signup", { next }));
+};
+
 export const POST: APIRoute = async ({ request, cookies, redirect }) => {
   const formData = await request.formData();
   const email = String(formData.get("email") ?? "").trim();
