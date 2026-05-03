@@ -5,9 +5,6 @@ import { DEFAULT_PRODUCT } from "@/lib/products";
 import { hasPurchase } from "@/lib/supabase";
 import { hasCheckoutConfig, hasPurchaseValidationConfig } from "@/lib/env";
 import heroScene from "@/images/mascots/mochi-mates/mochi-mallow-hero-scene.png";
-import gazeScene from "@/images/mascots/mochi-mates/mochi-mallow-gaze.png";
-import listeningMochi from "@/images/mascots/mochi-mates/mochi-listening.png";
-import mallowHeart from "@/images/mascots/mochi-mates/mallow-heart.png";
 
 const currentUser = Astro.locals?.user;
 
@@ -40,55 +37,52 @@ if (purchaseValidationConfigured) {
 const ritualPaths = [
   {
     title: "Quick reconnect",
-    detail: "A 5-minute reset for nights when you want warmth without pressure.",
+    detail: "One warm question when the evening needs an easier beginning.",
     time: "5 min",
   },
   {
     title: "Date-night spark",
-    detail: "Playful prompts for nights when you want closeness, chemistry, and a little softness.",
+    detail: "A softer way to move past small talk and back into each other.",
     time: "10 min",
   },
   {
     title: "Weekly check-in",
-    detail: "A calmer ritual for reflecting, naming needs, and ending with one tiny promise.",
+    detail: "A calm reset for what felt good, what felt hard, and what comes next.",
     time: "15 min",
   },
 ];
 
 const starterPrompts = [
   {
-    eyebrow: "Tonight's gentle start",
+    eyebrow: "Gentle start",
     title: "What helped you feel most cared for by me this week?",
     detail: "Answer in one sentence each, then ask one follow-up.",
   },
   {
-    eyebrow: "Reset after a long week",
+    eyebrow: "Reset",
     title: "What are we carrying into tonight that we don't want to keep carrying?",
     detail: "Name it softly, then choose one tiny way to make the week feel lighter.",
   },
   {
-    eyebrow: "Future ritual",
+    eyebrow: "Next week",
     title: "What would make next week feel a little more us?",
     detail: "End by choosing one small thing to protect together.",
   },
 ];
 
-const mascotNotes = [
-  { title: "Mochi's pick", detail: "Start gently and let one honest answer be enough.", image: listeningMochi },
-  { title: "Mallow's pick", detail: "Add a tiny flirt or a silly promise so the ritual stays light.", image: mallowHeart },
-];
-
 const progressStats = purchased
   ? [
-      { label: "Ritual status", value: "Unlocked" },
-      { label: "Prompts inside", value: "120" },
-      { label: "Suggested tonight", value: "Quick reconnect" },
+      { label: "Status", value: "Unlocked" },
+      { label: "Prompts", value: "120" },
+      { label: "Tonight", value: "Quick reconnect" },
     ]
   : [
-      { label: "Ritual status", value: "Preview" },
-      { label: "Unlocks instantly", value: DEFAULT_PRODUCT.name },
-      { label: "Prompts inside", value: "120" },
+      { label: "Status", value: "Preview" },
+      { label: "Price", value: "$29 once" },
+      { label: "Prompts", value: "120" },
     ];
+
+const featuredPrompt = starterPrompts[0];
 
 const title = purchased ? "My Deck | Love Alaoui" : "Preview My Deck | Love Alaoui";
 const description = purchased
@@ -97,7 +91,7 @@ const description = purchased
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/my-deck" robots="noindex, follow">
-  <section class="mx-auto max-w-5xl space-y-6 py-12">
+  <section class="mx-auto max-w-5xl space-y-6 py-8 sm:py-10">
     {
       !purchaseValidationConfigured && (
         <div class="rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">
@@ -106,18 +100,18 @@ const description = purchased
       )
     }
 
-    <div class="overflow-hidden rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,250,247,0.98),rgba(255,244,247,0.94))] shadow-[0_24px_70px_rgba(216,160,168,0.16)] ring-1 ring-white/90">
-      <div class="grid gap-0 lg:grid-cols-[1.05fr_.95fr]">
-        <div class="space-y-5 px-6 py-7 sm:px-8 sm:py-8 lg:px-10 lg:py-10">
-          <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">My Deck</p>
-          <h1 class="font-editorial max-w-[11ch] text-[clamp(2.45rem,5vw,4rem)] font-medium leading-[0.94] text-base-900">
-            {purchased ? "Your Better Conversations Deck is open." : "Preview your Better Conversations Deck."}
+    <div class="overflow-hidden rounded-[2rem] bg-white/88 shadow-[0_24px_70px_rgba(216,160,168,0.13)] ring-1 ring-white/90">
+      <div class="grid gap-0 lg:grid-cols-[minmax(0,1fr)_minmax(20rem,.78fr)]">
+        <div class="space-y-5 px-6 py-7 sm:px-8 lg:px-10 lg:py-10">
+          <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">{purchased ? "Unlocked" : "Preview"}</p>
+          <h1 class="font-editorial max-w-[12ch] text-[clamp(2.45rem,5vw,4.2rem)] font-medium leading-[0.94] text-base-900">
+            The Better Conversations Deck.
           </h1>
-          <p class="max-w-2xl text-sm leading-relaxed text-base-700">
+          <p class="max-w-xl text-sm leading-relaxed text-base-700 sm:text-base">
             {
               purchased
-                ? `Your account is ready for ${DEFAULT_PRODUCT.name}. Pick a path, draw one prompt, and make tonight's check-in easy to begin.`
-                : `This is where ${DEFAULT_PRODUCT.name} lives after purchase. Unlock 120 prompts, starter rituals, and private account access you can return to any night.`
+                ? "Choose a path, draw one prompt, and make tonight's conversation easier to begin."
+                : "Unlock 120 guided prompts for date nights, weekly check-ins, and the moments that need a softer start."
             }
           </p>
 
@@ -137,135 +131,77 @@ const description = purchased
               )
             }
             <a href="#starter-prompts" class="inline-flex h-11 items-center justify-center rounded-full border border-white bg-white/84 px-6 text-sm font-medium text-base-900 transition hover:bg-white">
-              See starter prompts
+              Preview prompts
             </a>
           </div>
 
-          <div class="grid gap-3 sm:grid-cols-3">
+          <div class="grid grid-cols-3 gap-2 pt-2 sm:gap-3">
             {progressStats.map((stat) => (
-              <article class="rounded-2xl bg-white/80 px-4 py-4 ring-1 ring-white shadow-[0_10px_24px_rgba(225,197,204,0.10)]">
-                <p class="text-xs uppercase tracking-[0.18em] text-base-500">{stat.label}</p>
-                <p class="mt-2 text-lg font-medium text-base-900">{stat.value}</p>
+              <article class="rounded-[1.25rem] bg-base-50 px-3 py-3 ring-1 ring-base-100 sm:px-4">
+                <p class="text-[0.65rem] uppercase tracking-[0.16em] text-base-500">{stat.label}</p>
+                <p class="mt-1 text-sm font-medium text-base-900 sm:text-base">{stat.value}</p>
               </article>
             ))}
           </div>
         </div>
 
-        <div class="bg-[radial-gradient(circle_at_top,_rgba(255,237,238,.72),_rgba(255,248,244,.84)_38%,_rgba(250,247,244,.92)_100%)] px-6 py-7 sm:px-8 sm:py-8 lg:px-8 lg:py-10">
-          <div class="relative mx-auto flex h-full min-h-[18rem] max-w-[22rem] items-center justify-center rounded-[2rem] border border-white/80 bg-white/68 p-6 shadow-[0_20px_60px_rgba(104,74,74,0.10)]">
-            <Image src={heroScene} alt="" class="w-[72%] max-w-[16rem] object-contain drop-shadow-[0_20px_30px_rgba(71,46,46,0.12)]" aria-hidden="true" />
-            <div class="absolute bottom-5 left-5 max-w-[12rem] rounded-[1.35rem] bg-white/92 p-3 shadow-lg ring-1 ring-rose-100">
-              <p class="text-[0.65rem] font-medium uppercase tracking-[0.22em] text-rose-700">A little nudge</p>
-              <p class="mt-2 text-sm leading-relaxed text-base-800">
-                {purchased ? "Start smaller than you think. One good prompt is enough to change the mood." : "Your private deck unlocks instantly after checkout."}
-              </p>
+        <div class="bg-[linear-gradient(180deg,rgba(255,250,247,0.96),rgba(246,239,234,0.82))] px-6 py-6 sm:px-8 lg:px-8 lg:py-10">
+          <div class="relative h-full rounded-[1.75rem] bg-white/82 p-5 ring-1 ring-white shadow-[0_18px_52px_rgba(104,74,74,0.10)]">
+            <p class="text-xs font-medium uppercase tracking-[0.2em] text-rose-700">Tonight's card</p>
+            <h2 class="mt-3 text-xl font-semibold leading-tight text-base-900">{featuredPrompt.title}</h2>
+            <p class="mt-4 max-w-sm text-sm leading-relaxed text-base-700">{featuredPrompt.detail}</p>
+            <div class="mt-6 rounded-[1.25rem] bg-base-50 p-4 ring-1 ring-base-100">
+              <p class="text-xs uppercase tracking-[0.18em] text-base-500">How to use it</p>
+              <p class="mt-2 text-sm leading-relaxed text-base-800">Answer, ask one follow-up, then choose one small thing to carry into the week.</p>
             </div>
+            <Image src={heroScene} alt="" class="pointer-events-none absolute bottom-4 right-4 hidden w-20 object-contain opacity-80 drop-shadow-[0_12px_22px_rgba(71,46,46,0.10)] sm:block" loading="lazy" aria-hidden="true" />
           </div>
         </div>
       </div>
     </div>
 
-    <section id="start-tonight" class="grid gap-4 lg:grid-cols-[1.05fr_.95fr]">
-      <div class="rounded-[2rem] bg-white/86 p-6 shadow-[0_20px_60px_rgba(216,160,168,0.12)] ring-1 ring-white sm:p-8">
+    <section id="start-tonight" class="rounded-[2rem] bg-white/86 p-6 shadow-[0_20px_60px_rgba(216,160,168,0.10)] ring-1 ring-white sm:p-8">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
         <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Start tonight</p>
         <h2 class="mt-2 text-2xl font-semibold text-base-900">
-          {purchased ? "Choose the kind of closeness you need." : "Preview the paths waiting inside."}
+          Choose the kind of closeness you need.
         </h2>
         <p class="mt-3 text-sm leading-relaxed text-base-700">
-          {purchased ? "You do not need a perfect evening. Pick one path, answer one prompt, and let that be enough to start." : "Every deck begins with a few easy entry points so you never have to wonder how to begin."}
+          Pick one path. Let one good question be enough.
         </p>
+        </div>
+        {!purchased && <p class="max-w-xs text-sm leading-relaxed text-base-600">Unlock the deck to use every path and prompt from your private account.</p>}
+      </div>
 
         <div class="mt-5 grid gap-3 sm:grid-cols-3">
           {ritualPaths.map((path) => (
-            <article class="rounded-3xl bg-gradient-to-b from-white to-rose-50 p-4 ring-1 ring-rose-100 shadow-[0_10px_24px_rgba(225,197,204,0.10)]">
+            <article class="rounded-[1.5rem] bg-white p-4 ring-1 ring-base-100 shadow-sm">
               <p class="text-xs uppercase tracking-[0.16em] text-rose-700">{path.time}</p>
               <h3 class="mt-2 text-base font-medium text-base-900">{path.title}</h3>
               <p class="mt-2 text-sm leading-relaxed text-base-600">{path.detail}</p>
             </article>
           ))}
         </div>
-      </div>
-
-      <div class="rounded-[2rem] bg-[linear-gradient(180deg,rgba(246,251,248,0.96),rgba(255,247,246,0.92))] p-6 ring-1 ring-white sm:p-8">
-        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">How this works</p>
-        <h2 class="mt-2 text-2xl font-semibold text-base-900">A simple ritual in three steps.</h2>
-        <ol class="mt-5 space-y-4 text-sm text-base-700">
-          <li>
-            <span class="font-medium text-base-900">1. Pick your mood.</span> Choose whether you need a quick reconnect, a date-night spark, or a deeper check-in.
-          </li>
-          <li>
-            <span class="font-medium text-base-900">2. Draw one prompt.</span> Read it out loud, answer honestly, then ask one soft follow-up.
-          </li>
-          <li>
-            <span class="font-medium text-base-900">3. End with one tiny promise.</span> Keep it small enough that it actually changes the next few days.
-          </li>
-        </ol>
-      </div>
     </section>
 
-    <section id="starter-prompts" class="rounded-[2rem] bg-white/86 p-6 shadow-[0_20px_60px_rgba(216,160,168,0.12)] ring-1 ring-white sm:p-8">
+    <section id="starter-prompts" class="rounded-[2rem] bg-white/86 p-6 shadow-[0_20px_60px_rgba(216,160,168,0.10)] ring-1 ring-white sm:p-8">
       <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Starter prompts</p>
-          <h2 class="mt-2 text-2xl font-semibold text-base-900">Begin with something gentle and real.</h2>
+          <h2 class="mt-2 text-2xl font-semibold text-base-900">A few ways in.</h2>
         </div>
-        {!purchased && <p class="max-w-sm text-sm text-base-600">Unlock the deck to turn these previews into a ritual home you can return to any night.</p>}
+        <p class="max-w-sm text-sm leading-relaxed text-base-600">Each prompt is designed to start lightly, then leave you with one small next step.</p>
       </div>
 
       <div class="mt-5 grid gap-3 lg:grid-cols-3">
         {starterPrompts.map((prompt) => (
-          <article class="rounded-3xl bg-gradient-to-b from-white to-rose-50 p-5 ring-1 ring-rose-100">
+          <article class="rounded-[1.5rem] bg-white p-5 ring-1 ring-base-100 shadow-sm">
             <p class="text-xs uppercase tracking-[0.2em] text-rose-700">{prompt.eyebrow}</p>
             <h3 class="mt-3 text-base font-medium text-base-900">{prompt.title}</h3>
             <p class="mt-3 text-sm leading-relaxed text-base-600">{prompt.detail}</p>
           </article>
         ))}
-      </div>
-
-      {!purchased && <div class="mt-6 grid gap-3 sm:grid-cols-2">
-        {mascotNotes.map((note) => (
-          <article class="rounded-[1.5rem] border border-white bg-[#fffaf8] p-4 shadow-[0_10px_24px_rgba(225,197,204,0.10)]">
-            <div class="flex items-center gap-3">
-              <Image src={note.image} alt="" class="h-12 w-12 object-contain" loading="lazy" aria-hidden="true" />
-              <div>
-                <p class="text-xs uppercase tracking-[0.18em] text-rose-700">{note.title}</p>
-                <p class="mt-1 text-sm text-base-700">{note.detail}</p>
-              </div>
-            </div>
-          </article>
-        ))}
-      </div>}
-    </section>
-
-    <section class="grid gap-4 lg:grid-cols-[1.02fr_.98fr]">
-      <div class="rounded-[2rem] bg-[linear-gradient(180deg,rgba(245,251,248,0.96),rgba(255,247,246,0.92))] p-6 ring-1 ring-white sm:p-8">
-        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Deck overview</p>
-        <h2 class="mt-2 text-2xl font-semibold text-base-900">{DEFAULT_PRODUCT.name}</h2>
-        <p class="mt-3 text-sm leading-relaxed text-base-700">{DEFAULT_PRODUCT.description}</p>
-        <div class="mt-5 grid gap-3 sm:grid-cols-2">
-          <div class="rounded-2xl bg-white px-4 py-4 ring-1 ring-base-100">
-            <p class="text-xs uppercase tracking-[0.16em] text-base-500">Best for</p>
-            <p class="mt-2 text-sm font-medium text-base-900">Date nights, weekly check-ins, and reset evenings</p>
-          </div>
-          <div class="rounded-2xl bg-white px-4 py-4 ring-1 ring-base-100">
-            <p class="text-xs uppercase tracking-[0.16em] text-base-500">Feel</p>
-            <p class="mt-2 text-sm font-medium text-base-900">Playful, calm, reflective, and easy to revisit</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="rounded-[2rem] bg-white/86 p-6 shadow-[0_20px_60px_rgba(216,160,168,0.12)] ring-1 ring-white sm:p-8">
-        <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">A note for tonight</p>
-        <h2 class="mt-2 text-2xl font-semibold text-base-900">Two minutes still counts.</h2>
-        <p class="mt-3 text-sm leading-relaxed text-base-700">
-          The goal is not to do this perfectly. The goal is to create a tiny opening for honesty, care, and closeness more often than you would without it.
-        </p>
-        <div class="mt-5 flex items-center gap-4 rounded-3xl bg-gradient-to-r from-rose-50 to-amber-50 p-4 ring-1 ring-rose-100">
-          <Image src={gazeScene} alt="" class="h-16 w-16 object-contain" loading="lazy" aria-hidden="true" />
-          <p class="text-sm leading-relaxed text-base-800">
-            Start smaller than you think. If one card makes you smile and talk for five extra minutes, the ritual worked.
-          </p>
-        </div>
       </div>
     </section>
   </section>
