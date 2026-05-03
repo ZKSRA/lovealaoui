@@ -2,9 +2,15 @@
 import { Image } from "astro:assets";
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { DEFAULT_PRODUCT } from "@/lib/products";
+import { DECK_CARDS, PREVIEW_DECK_CARDS } from "@/lib/deck-cards";
 import { hasPurchase } from "@/lib/supabase";
 import { hasCheckoutConfig, hasPurchaseValidationConfig } from "@/lib/env";
+import logoInline from "@/images/branding/love-alaoui-logo-inline.png";
 import heroScene from "@/images/mascots/mochi-mates/mochi-mallow-hero-scene.png";
+import mochiShy from "@/images/mascots/mochi-mates/mochi-shy-smile.png";
+import mochiListening from "@/images/mascots/mochi-mates/mochi-listening.png";
+import mallowReady from "@/images/mascots/mochi-mates/mallow-ready.png";
+import mallowHeart from "@/images/mascots/mochi-mates/mallow-heart.png";
 
 const currentUser = Astro.locals?.user;
 
@@ -52,24 +58,6 @@ const ritualPaths = [
   },
 ];
 
-const starterPrompts = [
-  {
-    eyebrow: "Gentle start",
-    title: "What helped you feel most cared for by me this week?",
-    detail: "Answer in one sentence each, then ask one follow-up.",
-  },
-  {
-    eyebrow: "Reset",
-    title: "What are we carrying into tonight that we don't want to keep carrying?",
-    detail: "Name it softly, then choose one tiny way to make the week feel lighter.",
-  },
-  {
-    eyebrow: "Next week",
-    title: "What would make next week feel a little more us?",
-    detail: "End by choosing one small thing to protect together.",
-  },
-];
-
 const progressStats = purchased
   ? [
       { label: "Status", value: "Unlocked" },
@@ -82,7 +70,23 @@ const progressStats = purchased
       { label: "Prompts", value: "120" },
     ];
 
-const featuredPrompt = starterPrompts[0];
+const deckCards = purchased ? DECK_CARDS : PREVIEW_DECK_CARDS;
+const featuredPrompt = deckCards[0];
+const characterArt = {
+  Mochi: mochiShy.src,
+  Mallow: mallowReady.src,
+  "Mochi & Mallow": heroScene.src,
+};
+const characterAltArt = {
+  Mochi: mochiListening.src,
+  Mallow: mallowHeart.src,
+  "Mochi & Mallow": heroScene.src,
+};
+const deckPayload = deckCards.map((card) => ({
+  ...card,
+  characterImage: characterArt[card.character],
+  characterAltImage: characterAltArt[card.character],
+}));
 
 const title = purchased ? "My Deck | Love Alaoui" : "Preview My Deck | Love Alaoui";
 const description = purchased
@@ -118,8 +122,8 @@ const description = purchased
           <div class="flex flex-wrap gap-3">
             {
               purchased ? (
-                <a href="#start-tonight" class="inline-flex h-11 items-center justify-center rounded-full bg-rose-600 px-6 text-sm font-medium text-white shadow-[0_14px_28px_rgba(225,139,166,0.28)] transition hover:bg-rose-700">
-                  Start tonight's ritual
+                <a href="#deck-player" class="inline-flex h-11 items-center justify-center rounded-full bg-rose-600 px-6 text-sm font-medium text-white shadow-[0_14px_28px_rgba(225,139,166,0.28)] transition hover:bg-rose-700">
+                  Draw a card
                 </a>
               ) : (
                 <form method="post" action="/api/checkout">
@@ -130,8 +134,8 @@ const description = purchased
                 </form>
               )
             }
-            <a href="#starter-prompts" class="inline-flex h-11 items-center justify-center rounded-full border border-white bg-white/84 px-6 text-sm font-medium text-base-900 transition hover:bg-white">
-              Preview prompts
+            <a href="#deck-player" class="inline-flex h-11 items-center justify-center rounded-full border border-white bg-white/84 px-6 text-sm font-medium text-base-900 transition hover:bg-white">
+              {purchased ? "Open deck" : "Preview cards"}
             </a>
           </div>
 
@@ -148,8 +152,8 @@ const description = purchased
         <div class="bg-[linear-gradient(180deg,rgba(255,250,247,0.96),rgba(246,239,234,0.82))] px-6 py-6 sm:px-8 lg:px-8 lg:py-10">
           <div class="relative h-full rounded-[1.75rem] bg-white/82 p-5 ring-1 ring-white shadow-[0_18px_52px_rgba(104,74,74,0.10)]">
             <p class="text-xs font-medium uppercase tracking-[0.2em] text-rose-700">Tonight's card</p>
-            <h2 class="mt-3 text-xl font-semibold leading-tight text-base-900">{featuredPrompt.title}</h2>
-            <p class="mt-4 max-w-sm text-sm leading-relaxed text-base-700">{featuredPrompt.detail}</p>
+            <h2 class="mt-3 text-xl font-semibold leading-tight text-base-900">{featuredPrompt.question}</h2>
+            <p class="mt-4 max-w-sm text-sm leading-relaxed text-base-700">{featuredPrompt.followUp}</p>
             <div class="mt-6 rounded-[1.25rem] bg-base-50 p-4 ring-1 ring-base-100">
               <p class="text-xs uppercase tracking-[0.18em] text-base-500">How to use it</p>
               <p class="mt-2 text-sm leading-relaxed text-base-800">Answer, ask one follow-up, then choose one small thing to carry into the week.</p>
@@ -159,6 +163,89 @@ const description = purchased
         </div>
       </div>
     </div>
+
+    <section id="deck-player" class="overflow-hidden rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,250,247,0.96),rgba(255,244,247,0.90))] p-5 shadow-[0_24px_70px_rgba(216,160,168,0.14)] ring-1 ring-white/90 sm:p-8" data-deck-root>
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">The deck</p>
+          <h2 class="mt-2 text-2xl font-semibold text-base-900">Go through it one card at a time.</h2>
+        </div>
+        <p class="max-w-sm text-sm leading-relaxed text-base-600">
+          {purchased ? "All 120 cards are unlocked. Draw, talk, then move to the next one when you are ready." : "Preview three cards. Unlock once to open all 120."}
+        </p>
+      </div>
+
+      <div class="mt-7 grid gap-8 lg:grid-cols-[minmax(0,.86fr)_minmax(19rem,.7fr)] lg:items-center">
+        <div class="deck-stage" aria-live="polite">
+          <div class="deck-card-shadow deck-card-shadow-one"></div>
+          <div class="deck-card-shadow deck-card-shadow-two"></div>
+          <div class="deck-card-shadow deck-card-shadow-three"></div>
+          <article class="deck-card" data-card-shell>
+            <div class="deck-card-brand">
+              <img src={logoInline.src} alt="Love Alaoui" class="deck-card-logo" />
+              <span data-card-count>1 / {deckCards.length}</span>
+            </div>
+            <div class="deck-card-character-wrap">
+              <img src={deckPayload[0].characterImage} alt="" class="deck-card-character" data-card-character aria-hidden="true" />
+            </div>
+            <p class="deck-card-mode" data-card-mode>{deckPayload[0].mode}</p>
+            <h3 class="deck-card-question" data-card-question>{deckPayload[0].question}</h3>
+            <div class="deck-card-footer">
+              <div>
+                <p>Follow-up</p>
+                <span data-card-follow>{deckPayload[0].followUp}</span>
+              </div>
+              <div>
+                <p>Close with</p>
+                <span data-card-action>{deckPayload[0].closingAction}</span>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="space-y-4">
+          <div class="rounded-[1.5rem] bg-white/82 p-4 ring-1 ring-white shadow-sm">
+            <p class="text-xs font-medium uppercase tracking-[0.2em] text-rose-700">Now showing</p>
+            <p class="mt-2 text-lg font-semibold text-base-900" data-side-title>{deckPayload[0].mode}</p>
+            <p class="mt-2 text-sm leading-relaxed text-base-700" data-side-copy>
+              {purchased ? "Take this one slowly. The next card can wait." : "This preview shows how each card feels once the deck is unlocked."}
+            </p>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2 text-center">
+            <div class="rounded-[1.25rem] bg-white/76 px-3 py-3 ring-1 ring-white">
+              <p class="text-[0.65rem] uppercase tracking-[0.16em] text-base-500">Cards</p>
+              <p class="mt-1 text-base font-semibold text-base-900">{purchased ? "120" : "3"}</p>
+            </div>
+            <div class="rounded-[1.25rem] bg-white/76 px-3 py-3 ring-1 ring-white">
+              <p class="text-[0.65rem] uppercase tracking-[0.16em] text-base-500">Style</p>
+              <p class="mt-1 text-base font-semibold text-base-900">1 by 1</p>
+            </div>
+            <div class="rounded-[1.25rem] bg-white/76 px-3 py-3 ring-1 ring-white">
+              <p class="text-[0.65rem] uppercase tracking-[0.16em] text-base-500">Feel</p>
+              <p class="mt-1 text-base font-semibold text-base-900">Playful</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-2">
+            <button type="button" class="deck-control" data-prev-card>Previous</button>
+            <button type="button" class="deck-control deck-control-primary" data-next-card>{purchased ? "Next card" : "Next preview"}</button>
+            <button type="button" class="deck-control" data-shuffle-card>Shuffle</button>
+          </div>
+
+          {!purchased && (
+            <form method="post" action="/api/checkout" class="rounded-[1.5rem] bg-base-900 p-4 text-white shadow-[0_16px_40px_rgba(45,30,30,0.14)]">
+              <input type="hidden" name="productSlug" value={DEFAULT_PRODUCT.slug} />
+              <p class="text-sm font-medium">Unlock all 120 cards.</p>
+              <p class="mt-1 text-sm text-rose-100">Private access, one-time purchase, secure checkout.</p>
+              <button type="submit" disabled={!checkoutConfigured} class="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full bg-white px-5 text-sm font-medium text-base-900 disabled:cursor-not-allowed disabled:opacity-50">
+                Unlock {DEFAULT_PRODUCT.name} · $29
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
+    </section>
 
     <section id="start-tonight" class="rounded-[2rem] bg-white/86 p-6 shadow-[0_20px_60px_rgba(216,160,168,0.10)] ring-1 ring-white sm:p-8">
       <div class="flex flex-wrap items-end justify-between gap-4">
@@ -195,14 +282,264 @@ const description = purchased
       </div>
 
       <div class="mt-5 grid gap-3 lg:grid-cols-3">
-        {starterPrompts.map((prompt) => (
+        {deckCards.slice(0, 3).map((prompt) => (
           <article class="rounded-[1.5rem] bg-white p-5 ring-1 ring-base-100 shadow-sm">
-            <p class="text-xs uppercase tracking-[0.2em] text-rose-700">{prompt.eyebrow}</p>
-            <h3 class="mt-3 text-base font-medium text-base-900">{prompt.title}</h3>
-            <p class="mt-3 text-sm leading-relaxed text-base-600">{prompt.detail}</p>
+            <p class="text-xs uppercase tracking-[0.2em] text-rose-700">{prompt.mode}</p>
+            <h3 class="mt-3 text-base font-medium text-base-900">{prompt.question}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-base-600">{prompt.followUp}</p>
           </article>
         ))}
       </div>
     </section>
   </section>
+
+  <script is:inline define:vars={{ deckPayload, purchased }}>
+    const root = document.querySelector("[data-deck-root]");
+    const cards = deckPayload;
+
+    if (root && cards.length > 0) {
+      let currentIndex = 0;
+      const shell = root.querySelector("[data-card-shell]");
+      const count = root.querySelector("[data-card-count]");
+      const character = root.querySelector("[data-card-character]");
+      const mode = root.querySelector("[data-card-mode]");
+      const question = root.querySelector("[data-card-question]");
+      const follow = root.querySelector("[data-card-follow]");
+      const action = root.querySelector("[data-card-action]");
+      const sideTitle = root.querySelector("[data-side-title]");
+      const sideCopy = root.querySelector("[data-side-copy]");
+      const prev = root.querySelector("[data-prev-card]");
+      const next = root.querySelector("[data-next-card]");
+      const shuffle = root.querySelector("[data-shuffle-card]");
+
+      const renderCard = (nextIndex) => {
+        currentIndex = (nextIndex + cards.length) % cards.length;
+        const card = cards[currentIndex];
+        shell?.classList.remove("is-dealing");
+        requestAnimationFrame(() => shell?.classList.add("is-dealing"));
+
+        if (count) count.textContent = `${currentIndex + 1} / ${cards.length}`;
+        if (character) {
+          character.setAttribute("src", currentIndex % 2 === 0 ? card.characterImage : card.characterAltImage);
+        }
+        if (mode) mode.textContent = card.mode;
+        if (question) question.textContent = card.question;
+        if (follow) follow.textContent = card.followUp;
+        if (action) action.textContent = card.closingAction;
+        if (sideTitle) sideTitle.textContent = card.mode;
+        if (sideCopy) {
+          sideCopy.textContent = purchased
+            ? `Card ${card.id} is ready. Read it out loud, answer honestly, then move when you want another.`
+            : "This preview shows how each card feels once the deck is unlocked.";
+        }
+      };
+
+      prev?.addEventListener("click", () => renderCard(currentIndex - 1));
+      next?.addEventListener("click", () => renderCard(currentIndex + 1));
+      shuffle?.addEventListener("click", () => {
+        const offset = Math.max(1, Math.floor(Math.random() * cards.length));
+        renderCard(currentIndex + offset);
+      });
+    }
+  </script>
+
+  <style>
+    .deck-stage {
+      position: relative;
+      min-height: 34rem;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .deck-card,
+    .deck-card-shadow {
+      width: min(100%, 24rem);
+      min-height: 31rem;
+      border-radius: 2rem;
+      transform-origin: 50% 82%;
+    }
+
+    .deck-card-shadow {
+      position: absolute;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 239, 244, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 20px 50px rgba(104, 74, 74, 0.08);
+    }
+
+    .deck-card-shadow-one {
+      transform: translate(-1.3rem, 1rem) rotate(-9deg);
+      background: #f6efea;
+    }
+
+    .deck-card-shadow-two {
+      transform: translate(1.35rem, 0.65rem) rotate(8deg);
+      background: #fff2f5;
+    }
+
+    .deck-card-shadow-three {
+      transform: translate(0.25rem, 1.9rem) rotate(2deg);
+      background: #fffaf8;
+    }
+
+    .deck-card {
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      padding: 1.15rem;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 197, 217, 0.34), transparent 23%),
+        radial-gradient(circle at 88% 20%, rgba(232, 216, 205, 0.5), transparent 24%),
+        linear-gradient(180deg, #fffdfb 0%, #fff2f5 100%);
+      border: 1px solid rgba(255, 255, 255, 0.98);
+      box-shadow: 0 28px 80px rgba(104, 74, 74, 0.16);
+      transition: transform 240ms ease, box-shadow 240ms ease;
+    }
+
+    .deck-card.is-dealing {
+      animation: deal-card 280ms ease;
+    }
+
+    .deck-card-brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--color-base-500);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .deck-card-logo {
+      width: 8.5rem;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .deck-card-character-wrap {
+      margin: 1rem auto 0;
+      display: grid;
+      place-items: center;
+      width: 9.5rem;
+      height: 8.5rem;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.58);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.75);
+    }
+
+    .deck-card-character {
+      max-width: 7.5rem;
+      max-height: 7.5rem;
+      object-fit: contain;
+      filter: drop-shadow(0 14px 20px rgba(104, 74, 74, 0.12));
+    }
+
+    .deck-card-mode {
+      margin-top: 1rem;
+      color: var(--color-rose-700);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .deck-card-question {
+      margin-top: 0.8rem;
+      color: var(--color-base-900);
+      font-family: "Newsreader", ui-serif, Georgia, serif;
+      font-size: clamp(1.75rem, 5vw, 2.55rem);
+      font-weight: 500;
+      line-height: 0.98;
+    }
+
+    .deck-card-footer {
+      position: absolute;
+      inset-inline: 1.15rem;
+      bottom: 1.15rem;
+      display: grid;
+      gap: 0.65rem;
+    }
+
+    .deck-card-footer > div {
+      border-radius: 1.2rem;
+      background: rgba(255, 255, 255, 0.76);
+      padding: 0.8rem 0.9rem;
+      box-shadow: 0 10px 24px rgba(104, 74, 74, 0.06);
+    }
+
+    .deck-card-footer p {
+      color: var(--color-base-500);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .deck-card-footer span {
+      margin-top: 0.35rem;
+      display: block;
+      color: var(--color-base-800);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .deck-control {
+      display: inline-flex;
+      min-height: 2.75rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.84);
+      padding: 0.7rem 1rem;
+      color: var(--color-base-900);
+      font-size: 0.875rem;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(104, 74, 74, 0.06);
+      transition: transform 160ms ease, background-color 160ms ease;
+    }
+
+    .deck-control:hover {
+      transform: translateY(-1px);
+      background: white;
+    }
+
+    .deck-control-primary {
+      background: var(--color-rose-600);
+      color: white;
+    }
+
+    .deck-control-primary:hover {
+      background: var(--color-rose-700);
+    }
+
+    @keyframes deal-card {
+      0% {
+        transform: translateY(0.75rem) rotate(-2deg) scale(0.985);
+      }
+      100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .deck-stage {
+        min-height: 33rem;
+      }
+
+      .deck-card,
+      .deck-card-shadow {
+        min-height: 30.5rem;
+      }
+
+      .deck-card-logo {
+        width: 7rem;
+      }
+
+      .deck-card-question {
+        font-size: clamp(1.55rem, 8vw, 2.05rem);
+      }
+    }
+  </style>
 </BaseLayout>
