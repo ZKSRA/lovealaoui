@@ -17,9 +17,19 @@
   --color-rose-50: oklch(97.6% 0.02 12.8);
   --color-rose-100: oklch(95.2% 0.032 13.5);
   --color-rose-200: oklch(90.6% 0.05 14.4);
-  --color-rose-600: oklch(54.1% 0.112 16.7);
-  --color-rose-700: oklch(47.9% 0.098 17.8);
-  --color-rose-800: oklch(41.3% 0.082 18.7);
+  --color-rose-300: #f2a7b5;
+  --color-rose-600: #a94b5e;
+  --color-rose-700: #873b4b;
+  --color-rose-800: #682e3a;
+
+  /* Playful mascot accents */
+  --color-blush-50: oklch(98.3% 0.022 8.4);
+  --color-blush-100: oklch(95.5% 0.048 8.7);
+  --color-blush-300: oklch(86.8% 0.093 8.9);
+  --color-mint-50: #f6efea;
+  --color-mint-100: #e8d8cd;
+  --color-mint-300: #ac7c61;
+  --color-butter-100: oklch(97.6% 0.033 95.1);
 }
 
 :root {
@@ -37,4 +47,81 @@
 
 * {
   -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+[id] {
+  scroll-margin-top: 7rem;
+}
+
+.font-editorial {
+  font-family: "Newsreader", ui-serif, Georgia, serif;
+}
+
+.dreamy-page {
+  background:
+    radial-gradient(circle at 15% 18%, rgba(255, 197, 217, 0.26), transparent 22%),
+    radial-gradient(circle at 84% 24%, rgba(218, 238, 221, 0.24), transparent 20%),
+    radial-gradient(circle at 50% 74%, rgba(255, 231, 196, 0.22), transparent 24%),
+    linear-gradient(180deg, rgba(255, 248, 246, 1) 0%, rgba(250, 245, 240, 1) 100%);
+}
+
+.glass-pill {
+  background: rgba(255, 255, 255, 0.68);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 3px solid rgba(135, 59, 75, 0.52);
+  outline-offset: 3px;
+}
+
+summary::-webkit-details-marker {
+  display: none;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 50;
+  transform: translateY(-150%);
+  border-radius: 999px;
+  background: var(--color-base-900);
+  color: white;
+  padding: 0.65rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 16px 36px rgba(45, 30, 30, 0.18);
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.field-input {
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: #fffaf8;
+  padding: 0.75rem 1rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease,
+    background-color 160ms ease;
+}
+
+.field-input:focus-visible {
+  border-color: var(--color-rose-600);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    0 0 0 4px rgba(135, 59, 75, 0.14);
 }

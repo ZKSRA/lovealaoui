@@ -1,37 +1,57 @@
 ---
 import "../styles/global.css";
 
-const siteTitle = "Love Alaoui | Mochi Mates Rituals For Couples";
-const siteDescription =
-  "Meet Mochi & Mallow and unlock soft, premium digital rituals for better conversations, date nights, and weekly connection.";
-const siteUrl = "https://lovealaoui.com/";
-const socialImage = "https://lovealaoui.com/social-cover.jpg";
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  socialImage?: string;
+  robots?: string;
+}
+
+const {
+  title = "Love Alaoui | The Better Conversations Deck",
+  description = "A premium digital conversation deck for couples, designed for date nights, weekly check-ins, and everyday connection.",
+  canonicalPath = "/",
+  socialImage = "https://lovealaoui.com/social-cover.jpg",
+  robots = "index, follow",
+} = Astro.props;
+
+const siteUrlBase = "https://lovealaoui.com";
+const siteUrl = new URL(canonicalPath, siteUrlBase).toString();
 ---
 
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>{siteTitle}</title>
-<meta name="description" content={siteDescription} />
+<title>{title}</title>
+<meta name="description" content={description} />
 <meta
   name="keywords"
   content="digital couples tools, conversation cards, date night prompts, relationship check in, couples connection"
 />
 <meta name="author" content="Love Alaoui" />
 <link rel="canonical" href={siteUrl} />
+<link rel="icon" type="image/png" href="/favicon-paw.png" />
 <meta name="theme-color" content="#f7edea" />
-<meta name="robots" content="index, follow" />
+<meta name="robots" content={robots} />
 
 <meta property="og:type" content="website" />
 <meta property="og:url" content={siteUrl} />
-<meta property="og:title" content={siteTitle} />
-<meta property="og:description" content={siteDescription} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
 <meta property="og:image" content={socialImage} />
 
 <meta property="twitter:card" content="summary_large_image" />
 <meta property="twitter:url" content={siteUrl} />
-<meta property="twitter:title" content={siteTitle} />
-<meta property="twitter:description" content={siteDescription} />
+<meta property="twitter:title" content={title} />
+<meta property="twitter:description" content={description} />
 <meta property="twitter:image" content={socialImage} />
 
 <link rel="preconnect" href="https://rsms.me/" />
 <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&display=swap"
+/>

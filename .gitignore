@@ -1,4 +1,27 @@
 node_modules/
 dist/
 .wrangler/
+.astro/
 .DS_Store
+.aidesigner/*
+!.aidesigner/.gitkeep
+
+# Codex local configuration
+.codex/
+
+# Ruflo / Claude local runtime scaffolding
+.claude/
+.claude-flow/
+.mcp.json
+CLAUDE.md
+
+# Claude Flow runtime data
+.claude-flow/data/
+.claude-flow/logs/
+.swarm/
+ruvector.db
+
+# Environment variables
+.env
+.env.local
+.env.*.local

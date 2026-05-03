@@ -1,13 +1,19 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
+const title = "Checkout Canceled | Love Alaoui";
+const description = "No charge was made. Return to Love Alaoui whenever you're ready to unlock The Better Conversations Deck.";
 ---
 
-<BaseLayout>
+<BaseLayout title={title} description={description} canonicalPath="/checkout/cancel" robots="noindex, follow">
   <section class="mx-auto max-w-2xl py-14">
     <div class="rounded-3xl bg-white p-6 text-center shadow-sm ring-1 ring-base-100 sm:p-8">
-      <h1 class="text-2xl font-semibold">Checkout canceled</h1>
-      <p class="mt-2 text-sm text-base-700">No charge was made. You can come back any time.</p>
-      <a href="/my-deck" class="mt-5 inline-flex h-11 items-center justify-center rounded-full bg-base-900 px-5 text-sm font-medium text-white">Back to My Deck</a>
+      <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">No charge was made</p>
+      <h1 class="mt-2 text-2xl font-semibold">Checkout was canceled.</h1>
+      <p class="mx-auto mt-2 max-w-md text-sm leading-relaxed text-base-700">You can resume when you are ready. Your account still gives you a private place to unlock and open the deck.</p>
+      <div class="mt-5 flex flex-wrap justify-center gap-3">
+        <a href="/my-deck" class="inline-flex h-11 items-center justify-center rounded-full bg-base-900 px-5 text-sm font-medium text-white">Resume checkout</a>
+        <a href="/" class="inline-flex h-11 items-center justify-center rounded-full border border-base-200 px-5 text-sm font-medium text-base-900">Back home</a>
+      </div>
     </div>
   </section>
 </BaseLayout>

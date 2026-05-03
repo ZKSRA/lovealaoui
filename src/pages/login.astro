@@ -3,7 +3,7 @@ import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getSafeNextPath } from "@/lib/navigation";
 
 if (Astro.locals?.user) {
-  return Astro.redirect("/account");
+  return Astro.redirect("/my-deck");
 }
 
 const next = getSafeNextPath(Astro.url.searchParams.get("next"));
@@ -20,31 +20,43 @@ const errorMessageMap: Record<string, string> = {
 };
 
 const errorMessage = errorCode ? errorMessageMap[errorCode] ?? "We couldn't sign you in." : null;
+
+const title = "Log In to Your Love Alaoui Deck";
+const description = "Log in to reopen your Love Alaoui deck, revisit your private conversation ritual, and continue checkout or deck access from your account.";
 ---
 
-<BaseLayout>
-  <section class="mx-auto max-w-md py-14">
-    <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-base-100 sm:p-8">
-      <h1 class="text-2xl font-semibold">Welcome back</h1>
-      <p class="mt-2 text-sm text-base-600">Log in to access your deck and purchases.</p>
-      {
-        errorMessage && (
-          <p class="mt-4 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700">{errorMessage}</p>
-        )
-      }
-      <form method="post" action="/api/auth/login" class="mt-6 space-y-3">
-        <input type="hidden" name="next" value={next} />
-        <label class="block text-sm">
-          <span>Email</span>
-          <input name="email" type="email" required class="mt-1 w-full rounded-xl border border-base-300 bg-white px-3 py-2" />
-        </label>
-        <label class="block text-sm">
-          <span>Password</span>
-          <input name="password" type="password" required class="mt-1 w-full rounded-xl border border-base-300 bg-white px-3 py-2" />
-        </label>
-        <button type="submit" class="mt-2 inline-flex h-11 w-full items-center justify-center rounded-full bg-base-900 text-sm font-medium text-white">Log in</button>
-      </form>
-      <p class="mt-4 text-sm text-base-600">No account yet? <a class="underline" href={`/signup?next=${encodeURIComponent(next)}`}>Create one</a></p>
-    </div>
+<BaseLayout title={title} description={description} canonicalPath="/login">
+  <section class="mx-auto max-w-xl py-8 sm:py-10">
+      <div class="relative overflow-hidden rounded-[1.75rem] bg-white/90 p-5 shadow-[0_24px_70px_rgba(216,160,168,0.14)] ring-1 ring-white sm:p-7">
+        <div class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--color-base-900),var(--color-rose-600))]"></div>
+        <div class="relative">
+          <p class="text-xs uppercase tracking-[0.22em] text-rose-700">Log in</p>
+          <h1 class="font-editorial mt-2 text-[clamp(2.1rem,6vw,3.1rem)] font-medium leading-[0.95] text-base-900">Welcome back.</h1>
+          <p class="mt-2 text-sm leading-relaxed text-base-600">Return to checkout or open your private deck.</p>
+          {
+            errorMessage && (
+              <p class="mt-4 rounded-[1rem] border border-rose-200 bg-rose-50 px-3 py-2 text-sm text-rose-700" aria-live="polite">{errorMessage}</p>
+            )
+          }
+          <form method="post" action="/api/auth/login" class="mt-5 space-y-3">
+            <input type="hidden" name="next" value={next} />
+            <label class="block text-sm text-base-700">
+              <span class="mb-1 block">Email</span>
+              <input name="email" type="email" autocomplete="email" spellcheck="false" required class="field-input" />
+            </label>
+            <label class="block text-sm text-base-700">
+              <span class="mb-1 block">Password</span>
+              <input name="password" type="password" autocomplete="current-password" required class="field-input" />
+            </label>
+            <button type="submit" class="inline-flex h-12 w-full items-center justify-center rounded-full bg-base-900 text-sm font-medium text-white shadow-[0_14px_28px_rgba(74,51,58,0.22)] transition hover:bg-base-800">Step into My Deck</button>
+          </form>
+          <p class="mt-4 text-sm text-base-600">No account yet? <a class="font-medium text-rose-700 underline decoration-rose-300 underline-offset-3" href={`/signup?next=${encodeURIComponent(next)}`}>Create your account</a></p>
+          <div class="mt-4 flex flex-wrap gap-2 text-xs font-medium text-base-600">
+            <span class="rounded-full bg-base-50 px-3 py-1.5 ring-1 ring-base-100">Deck access</span>
+            <span class="rounded-full bg-base-50 px-3 py-1.5 ring-1 ring-base-100">Checkout saved</span>
+            <a href="/contact" class="rounded-full bg-base-50 px-3 py-1.5 text-base-700 ring-1 ring-base-100 transition hover:text-base-900">Need help?</a>
+          </div>
+        </div>
+      </div>
   </section>
 </BaseLayout>

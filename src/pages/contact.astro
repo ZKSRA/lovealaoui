@@ -1,0 +1,35 @@
+---
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+const title = "Contact Love Alaoui for Deck & Account Help";
+const description = "Get in touch with Love Alaoui for account support, purchase questions, deck access help, and any issue related to The Better Conversations Deck.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/contact">
+  <section class="mx-auto max-w-3xl py-12">
+    <div class="rounded-[2rem] bg-white/88 p-6 shadow-[0_20px_60px_rgba(216,160,168,0.14)] ring-1 ring-white sm:p-8">
+      <p class="text-xs uppercase tracking-[0.22em] text-rose-700">Contact</p>
+      <h1 class="font-editorial mt-2 text-[clamp(2.2rem,4vw,3.4rem)] font-medium leading-[0.94] text-base-900">We can help.</h1>
+      <div class="mt-6 space-y-5 text-sm leading-relaxed text-base-700">
+        <p>If you need help with your account, purchase access, or a question about Love Alaoui, reach out and include the email tied to your deck if you have one.</p>
+        <div class="rounded-[1.5rem] bg-[#fffaf8] p-5 ring-1 ring-white">
+          <p class="text-xs uppercase tracking-[0.18em] text-base-500">Email</p>
+          <p class="mt-2 text-base font-medium text-base-900">hello@lovealaoui.com</p>
+        </div>
+        <p>We aim to reply as quickly as possible, especially for account access and checkout support.</p>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <article class="rounded-[1.25rem] bg-white/80 p-4 ring-1 ring-white">
+            <p class="text-xs uppercase tracking-[0.18em] text-base-500">Best for</p>
+            <p class="mt-2 text-sm text-base-700">Account help, deck access, checkout issues, and purchase questions.</p>
+          </article>
+          <article class="rounded-[1.25rem] bg-white/80 p-4 ring-1 ring-white">
+            <p class="text-xs uppercase tracking-[0.18em] text-base-500">Helpful detail</p>
+            <p class="mt-2 text-sm text-base-700">Include the email tied to your account so we can answer more quickly and clearly.</p>
+          </article>
+        </div>
+        <p>If your message is about a purchase, include any relevant checkout or confirmation details you have. If it is about a ritual or product question, tell us what you were trying to do so we can give you the most useful reply.</p>
+        <p>We want support to feel as calm and useful as the rest of the product. A little context helps us respond faster, whether you are trying to find your deck, confirm your purchase, or figure out what should happen next in the flow.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

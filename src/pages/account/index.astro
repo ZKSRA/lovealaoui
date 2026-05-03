@@ -6,9 +6,12 @@ const currentUser = Astro.locals?.user;
 if (!currentUser) {
   return Astro.redirect("/login?next=/account");
 }
+
+const title = "Account | Love Alaoui";
+const description = "Manage your Love Alaoui account and move into your Better Conversations Deck from one private account home.";
 ---
 
-<BaseLayout>
+<BaseLayout title={title} description={description} canonicalPath="/account" robots="noindex, follow">
   <section class="mx-auto max-w-2xl py-12">
     <div class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-base-100 sm:p-8">
       <h1 class="text-2xl font-semibold">Account</h1>
@@ -16,10 +19,6 @@ if (!currentUser) {
         <div>
           <dt class="text-base-500">Email</dt>
           <dd class="font-medium text-base-900">{currentUser.email ?? "No email returned"}</dd>
-        </div>
-        <div>
-          <dt class="text-base-500">User ID</dt>
-          <dd class="break-all text-base-700">{currentUser.id}</dd>
         </div>
       </dl>
       <div class="mt-6 flex flex-wrap gap-3">

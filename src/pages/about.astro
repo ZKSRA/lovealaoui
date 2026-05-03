@@ -1,0 +1,61 @@
+---
+import { Image } from "astro:assets";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+import heroScene from "@/images/mascots/mochi-mates/mochi-mallow-hero-scene.png";
+
+const title = "About Love Alaoui & The Better Conversations Deck";
+const description = "Learn about Love Alaoui and The Better Conversations Deck, a digital prompt deck for couples who want warmer date nights, easier check-ins, and better conversations.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/about">
+  <section class="mx-auto max-w-4xl space-y-6 py-12">
+    <div class="rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,250,247,0.96),rgba(255,243,247,0.92))] p-6 shadow-[0_24px_70px_rgba(216,160,168,0.16)] ring-1 ring-white/80 sm:p-8">
+      <div class="grid gap-6 md:grid-cols-[minmax(0,.9fr)_minmax(16rem,.8fr)] md:items-center">
+        <div>
+          <p class="text-xs uppercase tracking-[0.22em] text-rose-700">About</p>
+          <h1 class="font-editorial mt-2 text-[clamp(2.5rem,5vw,4rem)] font-medium leading-[0.92] text-base-900">A better way to begin the conversations that matter.</h1>
+          <p class="mt-4 text-sm leading-relaxed text-base-700 sm:text-base">
+            Love Alaoui is shaped around one simple idea: closeness usually grows through small, intentional moments. The Better Conversations Deck gives couples a practical structure for those moments, with Mochi and Mallow as gentle brand accents along the way.
+          </p>
+        </div>
+        <div class="rounded-[1.75rem] border border-white bg-white/80 p-5 shadow-[0_12px_30px_rgba(225,197,204,0.14)]">
+          <Image src={heroScene} alt="" class="mx-auto w-full max-w-[15rem] object-contain" loading="eager" aria-hidden="true" />
+        </div>
+      </div>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-3">
+      <article class="rounded-[1.5rem] bg-white/84 p-5 ring-1 ring-white shadow-[0_12px_30px_rgba(225,197,204,0.10)]">
+        <h2 class="text-sm font-medium text-base-900">Mochi</h2>
+        <p class="mt-2 text-sm leading-relaxed text-base-600">A soft visual cue for check-ins, reassurance, and the gentler prompts.</p>
+      </article>
+      <article class="rounded-[1.5rem] bg-white/84 p-5 ring-1 ring-white shadow-[0_12px_30px_rgba(225,197,204,0.10)]">
+        <h2 class="text-sm font-medium text-base-900">Mallow</h2>
+        <p class="mt-2 text-sm leading-relaxed text-base-600">A lighter visual cue for momentum, playful honesty, and small nudges into action.</p>
+      </article>
+      <article class="rounded-[1.5rem] bg-white/84 p-5 ring-1 ring-white shadow-[0_12px_30px_rgba(225,197,204,0.10)]">
+        <h2 class="text-sm font-medium text-base-900">Love Alaoui</h2>
+        <p class="mt-2 text-sm leading-relaxed text-base-600">A digital product home for thoughtful rituals that help couples reconnect without overcomplicating the moment.</p>
+      </article>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <article class="rounded-[1.5rem] bg-white/84 p-6 ring-1 ring-white shadow-[0_12px_30px_rgba(225,197,204,0.10)]">
+        <h2 class="text-base font-medium text-base-900">Why this exists</h2>
+        <p class="mt-3 text-sm leading-relaxed text-base-700">Love Alaoui is built for couples who do not need a giant system, just a clear way to start. The goal is to make connection easier to begin on the nights when you want warmth, honesty, and structure without overthinking the setup.</p>
+        <p class="mt-3 text-sm leading-relaxed text-base-700">That is why the product centers on short rituals, clear prompts, and a visual world that feels kind instead of clinical. It should be easy to return to, easy to share, and useful enough to become part of real life.</p>
+      </article>
+      <article class="rounded-[1.5rem] bg-white/84 p-6 ring-1 ring-white shadow-[0_12px_30px_rgba(225,197,204,0.10)]">
+        <h2 class="text-base font-medium text-base-900">What to expect</h2>
+        <p class="mt-3 text-sm leading-relaxed text-base-700">Inside the deck, couples will find guided prompts for quick reconnects, slower weekly check-ins, playful date-night moments, and gentle questions that create a little more closeness over time.</p>
+        <p class="mt-3 text-sm leading-relaxed text-base-700">The intention is not perfection. The intention is rhythm: one good question, one real answer, and one more little moment together than you might have made on your own.</p>
+      </article>
+    </div>
+
+    <div class="rounded-[1.5rem] bg-white/84 p-6 ring-1 ring-white shadow-[0_12px_30px_rgba(225,197,204,0.10)]">
+      <h2 class="text-base font-medium text-base-900">What kind of couples is this for?</h2>
+      <p class="mt-3 text-sm leading-relaxed text-base-700">Love Alaoui is for couples who want a little more softness and intentionality in the way they talk. It works for newer relationships, long-term relationships, and anyone who wants better conversations without turning connection into homework.</p>
+      <p class="mt-3 text-sm leading-relaxed text-base-700">Some people use it for date nights. Some use it for Sunday check-ins. Some use it on the exact nights when they almost would have drifted into separate little worlds and want one better starting point instead.</p>
+    </div>
+  </section>
+</BaseLayout>

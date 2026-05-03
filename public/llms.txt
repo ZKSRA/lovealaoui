@@ -1,0 +1,47 @@
+Love Alaoui
+
+Love Alaoui is a romantic digital product brand for couples.
+
+Primary product:
+- The Better Conversations Deck
+- 120 guided prompts for date nights, weekly check-ins, and everyday reconnection
+- One-time purchase with account-based access
+
+Brand system:
+- Love Alaoui = umbrella brand
+- Mochi = softer empathy, check-ins, reassurance
+- Mallow = momentum, play, warmth, celebration
+- Mochi Mates = the shared ritual world and guide voice
+
+Design and media guidance:
+- Premium, cutesy, mascot-led, soft, playful, romantic
+- No real-life photography in core design direction
+- Prefer character-led, abstract, color-led, or illustrated treatments
+- Primary pink accent: #FFC0C2
+- Company brown accent: #AC7C61
+
+Core routes:
+- / = landing page
+- /signup = account creation
+- /login = account sign-in
+- /checkout/success = post-purchase success screen
+- /my-deck = gated ritual home
+- /about = brand story
+- /privacy = privacy policy
+- /contact = support contact
+
+Commerce and access:
+- Auth uses Supabase
+- Checkout uses Stripe
+- Access to the deck is gated by account and purchase state
+
+Preferred voice:
+- warm
+- intimate
+- encouraging
+- gentle
+- premium without sounding corporate
+- playful without becoming childish
+
+Key promise:
+- Help couples begin sweeter, softer, more intentional conversations.
