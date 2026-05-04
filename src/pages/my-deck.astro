@@ -12,13 +12,14 @@ import mochiListening from "@/images/mascots/mochi-mates/mochi-listening.png";
 import mallowReady from "@/images/mascots/mochi-mates/mallow-ready.png";
 import mallowHeart from "@/images/mascots/mochi-mates/mallow-heart.png";
 
+const forceDeckPreview = import.meta.env.DEV && Astro.url.searchParams.get("devDeck") === "all";
 const currentUser = Astro.locals?.user;
 
-if (!currentUser) {
+if (!currentUser && !forceDeckPreview) {
   return Astro.redirect("/login?next=/my-deck");
 }
 
-let purchased = false;
+let purchased = forceDeckPreview;
 let purchaseValidationConfigured = hasPurchaseValidationConfig();
 const checkoutConfigured = hasCheckoutConfig();
 let purchaseValidationMessage =
@@ -29,7 +30,7 @@ if (!purchaseValidationConfigured) {
     "Deck access cannot be confirmed in this environment yet. If you already purchased, contact support with the email tied to your account.";
 }
 
-if (purchaseValidationConfigured) {
+if (!forceDeckPreview && purchaseValidationConfigured && currentUser) {
   try {
     purchased = await hasPurchase(currentUser.id, DEFAULT_PRODUCT.slug);
   } catch (error) {
@@ -96,6 +97,13 @@ const description = purchased
 
 <BaseLayout title={title} description={description} canonicalPath="/my-deck" robots="noindex, follow">
   <section class="mx-auto max-w-5xl space-y-6 py-8 sm:py-10">
+    {
+      forceDeckPreview && (
+        <div class="rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800">
+          Local preview mode is showing all 120 cards without checkout. Production still requires purchase access.
+        </div>
+      )
+    }
     {
       !purchaseValidationConfigured && (
         <div class="rounded-2xl border border-amber-300 bg-amber-50 p-4 text-sm text-amber-900">

@@ -4,7 +4,13 @@ export const prerender = false;
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { DEFAULT_PRODUCT } from "@/lib/products";
+import { PREVIEW_DECK_CARDS } from "@/lib/deck-cards";
+import logoInline from "@/images/branding/love-alaoui-logo-inline.png";
 import heroScene from "@/images/mascots/mochi-mates/mochi-mallow-hero-scene.png";
+import mochiShy from "@/images/mascots/mochi-mates/mochi-shy-smile.png";
+import mochiListening from "@/images/mascots/mochi-mates/mochi-listening.png";
+import mallowReady from "@/images/mascots/mochi-mates/mallow-ready.png";
+import mallowHeart from "@/images/mascots/mochi-mates/mallow-heart.png";
 
 const featuredProduct = {
   name: DEFAULT_PRODUCT.name,
@@ -33,23 +39,23 @@ const useCases = [
   },
 ];
 
-const productPreviews = [
-  {
-    label: "Tonight's card",
-    title: "What made you feel most supported by me this week?",
-    detail: "Answer, add one follow-up, then swap turns.",
-  },
-  {
-    label: "Reset mode",
-    title: "What are we carrying into tonight that we don't want to keep carrying?",
-    detail: "A gentle way to reset before things turn into distance.",
-  },
-  {
-    label: "Future mode",
-    title: "What would make next week feel softer, lighter, or more us?",
-    detail: "End with one tiny promise you can actually keep.",
-  },
-];
+const characterArt = {
+  Mochi: mochiShy.src,
+  Mallow: mallowReady.src,
+  "Mochi & Mallow": heroScene.src,
+};
+
+const characterAltArt = {
+  Mochi: mochiListening.src,
+  Mallow: mallowHeart.src,
+  "Mochi & Mallow": heroScene.src,
+};
+
+const previewDeckCards = PREVIEW_DECK_CARDS.map((card) => ({
+  ...card,
+  characterImage: characterArt[card.character],
+  characterAltImage: characterAltArt[card.character],
+}));
 
 const testimonials = [
   {
@@ -142,21 +148,42 @@ const description = "A one-time-purchase digital conversation deck for couples w
       </div>
     </section>
 
-    <section id="preview" class="space-y-4" aria-labelledby="preview-heading">
-      <div class="flex flex-wrap items-end justify-between gap-3">
+    <section id="preview" class="overflow-hidden rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,250,247,0.96),rgba(255,244,247,0.90))] p-5 shadow-[0_24px_70px_rgba(216,160,168,0.12)] ring-1 ring-white/90 sm:p-8" aria-labelledby="preview-heading" data-landing-deck>
+      <div class="grid gap-8 lg:grid-cols-[minmax(0,.82fr)_minmax(18rem,.72fr)] lg:items-center">
         <div>
-          <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Preview</p>
-          <h2 id="preview-heading" class="mt-2 text-[clamp(1.45rem,3.5vw,2rem)] font-semibold text-base-900">A prompt, a follow-up, a small next step.</h2>
+          <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Try the deck</p>
+          <h2 id="preview-heading" class="font-editorial mt-3 max-w-xl text-[clamp(2.1rem,5vw,3.45rem)] font-medium leading-[0.98] text-base-900">
+            Slide through a few test cards.
+          </h2>
+          <p class="mt-4 max-w-lg text-sm leading-relaxed text-base-700 sm:text-base">
+            Every card gives you a question, a follow-up, and one tiny next step. Unlock once to open all 120.
+          </p>
+          <div class="mt-5 flex flex-wrap gap-2">
+            <button type="button" class="landing-deck-control" data-landing-prev>Previous</button>
+            <button type="button" class="landing-deck-control landing-deck-control-primary" data-landing-next>Next test card</button>
+          </div>
+          <a href="/signup?next=/my-deck" class="mt-5 inline-flex h-11 items-center justify-center rounded-full bg-base-900 px-6 text-sm font-medium text-white transition hover:bg-base-800">
+            Unlock all 120 · {featuredProduct.price}
+          </a>
         </div>
-      </div>
-      <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 lg:gap-4">
-        {productPreviews.map((card) => (
-          <article class="rounded-[1.5rem] bg-white p-5 shadow-sm ring-1 ring-base-100">
-            <p class="text-xs font-medium uppercase tracking-[0.2em] text-rose-700">{card.label}</p>
-            <h3 class="mt-3 text-base font-medium text-base-900">{card.title}</h3>
-            <p class="mt-3 text-sm text-base-600">{card.detail}</p>
+
+        <div class="landing-deck-stage" aria-live="polite">
+          <div class="landing-card-back landing-card-back-one"></div>
+          <div class="landing-card-back landing-card-back-two"></div>
+          <article class="landing-card" data-landing-card-shell>
+            <div class="landing-card-brand">
+              <img src={logoInline.src} alt="Love Alaoui" class="landing-card-logo" />
+              <span data-landing-count>1 / {previewDeckCards.length}</span>
+            </div>
+            <img src={previewDeckCards[0].characterImage} alt="" class="landing-card-character" data-landing-character aria-hidden="true" />
+            <p class="landing-card-mode" data-landing-mode>{previewDeckCards[0].mode}</p>
+            <h3 class="landing-card-question" data-landing-question>{previewDeckCards[0].question}</h3>
+            <div class="landing-card-note">
+              <p>Follow-up</p>
+              <span data-landing-follow>{previewDeckCards[0].followUp}</span>
+            </div>
           </article>
-        ))}
+        </div>
       </div>
     </section>
 
@@ -203,4 +230,212 @@ const description = "A one-time-purchase digital conversation deck for couples w
       class="inline-flex h-11 w-full items-center justify-center rounded-full bg-base-900 px-6 text-sm font-medium text-white"
     >Sign up & unlock · {featuredProduct.price}</a>
   </div>
+
+  <script is:inline define:vars={{ previewDeckCards }}>
+    const root = document.querySelector("[data-landing-deck]");
+    const cards = previewDeckCards;
+
+    if (root && cards.length > 0) {
+      let currentIndex = 0;
+      const shell = root.querySelector("[data-landing-card-shell]");
+      const count = root.querySelector("[data-landing-count]");
+      const character = root.querySelector("[data-landing-character]");
+      const mode = root.querySelector("[data-landing-mode]");
+      const question = root.querySelector("[data-landing-question]");
+      const follow = root.querySelector("[data-landing-follow]");
+      const prev = root.querySelector("[data-landing-prev]");
+      const next = root.querySelector("[data-landing-next]");
+
+      const render = (nextIndex) => {
+        currentIndex = (nextIndex + cards.length) % cards.length;
+        const card = cards[currentIndex];
+        shell?.classList.remove("is-sliding");
+        requestAnimationFrame(() => shell?.classList.add("is-sliding"));
+
+        if (count) count.textContent = `${currentIndex + 1} / ${cards.length}`;
+        if (character) character.setAttribute("src", currentIndex % 2 === 0 ? card.characterImage : card.characterAltImage);
+        if (mode) mode.textContent = card.mode;
+        if (question) question.textContent = card.question;
+        if (follow) follow.textContent = card.followUp;
+      };
+
+      prev?.addEventListener("click", () => render(currentIndex - 1));
+      next?.addEventListener("click", () => render(currentIndex + 1));
+    }
+  </script>
+
+  <style>
+    .landing-deck-stage {
+      position: relative;
+      min-height: 30rem;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .landing-card,
+    .landing-card-back {
+      width: min(100%, 21rem);
+      min-height: 27rem;
+      border-radius: 1.8rem;
+      transform-origin: 50% 82%;
+    }
+
+    .landing-card-back {
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 20px 50px rgba(104, 74, 74, 0.08);
+    }
+
+    .landing-card-back-one {
+      transform: translate(-1rem, 0.9rem) rotate(-8deg);
+      background: #f6efea;
+    }
+
+    .landing-card-back-two {
+      transform: translate(1.2rem, 0.65rem) rotate(7deg);
+      background: #fff2f5;
+    }
+
+    .landing-card {
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      padding: 1rem;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 197, 217, 0.34), transparent 24%),
+        radial-gradient(circle at 88% 18%, rgba(232, 216, 205, 0.48), transparent 22%),
+        linear-gradient(180deg, #fffdfb 0%, #fff2f5 100%);
+      border: 1px solid rgba(255, 255, 255, 0.98);
+      box-shadow: 0 28px 80px rgba(104, 74, 74, 0.15);
+    }
+
+    .landing-card.is-sliding {
+      animation: landing-card-slide 280ms ease;
+    }
+
+    .landing-card-brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--color-base-500);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .landing-card-logo {
+      width: 7.5rem;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .landing-card-character {
+      display: block;
+      width: 6.8rem;
+      height: 6.8rem;
+      object-fit: contain;
+      margin: 0.95rem auto 0;
+      filter: drop-shadow(0 12px 20px rgba(104, 74, 74, 0.12));
+    }
+
+    .landing-card-mode {
+      margin-top: 1rem;
+      color: var(--color-rose-700);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .landing-card-question {
+      margin-top: 0.75rem;
+      color: var(--color-base-900);
+      font-family: "Newsreader", ui-serif, Georgia, serif;
+      font-size: clamp(1.65rem, 5vw, 2.35rem);
+      font-weight: 500;
+      line-height: 0.98;
+    }
+
+    .landing-card-note {
+      position: absolute;
+      inset-inline: 1rem;
+      bottom: 1rem;
+      border-radius: 1.2rem;
+      background: rgba(255, 255, 255, 0.78);
+      padding: 0.85rem 0.95rem;
+      box-shadow: 0 10px 24px rgba(104, 74, 74, 0.06);
+    }
+
+    .landing-card-note p {
+      color: var(--color-base-500);
+      font-size: 0.64rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .landing-card-note span {
+      margin-top: 0.35rem;
+      display: block;
+      color: var(--color-base-800);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    .landing-deck-control {
+      display: inline-flex;
+      min-height: 2.75rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.84);
+      padding: 0.7rem 1rem;
+      color: var(--color-base-900);
+      font-size: 0.875rem;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(104, 74, 74, 0.06);
+      transition: transform 160ms ease, background-color 160ms ease;
+    }
+
+    .landing-deck-control:hover {
+      transform: translateY(-1px);
+      background: white;
+    }
+
+    .landing-deck-control-primary {
+      background: var(--color-rose-600);
+      color: white;
+    }
+
+    .landing-deck-control-primary:hover {
+      background: var(--color-rose-700);
+    }
+
+    @keyframes landing-card-slide {
+      0% {
+        transform: translateY(0.65rem) rotate(-2deg) scale(0.985);
+      }
+      100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .landing-deck-stage {
+        min-height: 29rem;
+      }
+
+      .landing-card,
+      .landing-card-back {
+        min-height: 26.5rem;
+      }
+
+      .landing-card-question {
+        font-size: clamp(1.5rem, 7vw, 2rem);
+      }
+    }
+  </style>
 </BaseLayout>
