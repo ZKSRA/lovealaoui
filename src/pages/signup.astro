@@ -1,6 +1,13 @@
 ---
 import BaseLayout from "@/layouts/BaseLayout.astro";
 import { getSafeNextPath } from "@/lib/navigation";
+import { PREVIEW_DECK_CARDS } from "@/lib/deck-cards";
+import logoInline from "@/images/branding/love-alaoui-logo-inline.png";
+import heroScene from "@/images/mascots/mochi-mates/mochi-mallow-hero-scene.png";
+import mochiShy from "@/images/mascots/mochi-mates/mochi-shy-smile.png";
+import mochiListening from "@/images/mascots/mochi-mates/mochi-listening.png";
+import mallowReady from "@/images/mascots/mochi-mates/mallow-ready.png";
+import mallowHeart from "@/images/mascots/mochi-mates/mallow-heart.png";
 
 if (Astro.locals?.user) {
   return Astro.redirect("/my-deck");
@@ -29,12 +36,30 @@ const noticeMessage = noticeCode
   ? noticeMessageMap[noticeCode] ?? "Please check your email for next steps."
   : null;
 
+const characterArt = {
+  Mochi: mochiShy.src,
+  Mallow: mallowReady.src,
+  "Mochi & Mallow": heroScene.src,
+};
+
+const characterAltArt = {
+  Mochi: mochiListening.src,
+  Mallow: mallowHeart.src,
+  "Mochi & Mallow": heroScene.src,
+};
+
+const previewDeckCards = PREVIEW_DECK_CARDS.map((card) => ({
+  ...card,
+  characterImage: characterArt[card.character],
+  characterAltImage: characterAltArt[card.character],
+}));
+
 const title = "Create Your Love Alaoui Account";
 const description = "Create your Love Alaoui account to unlock The Better Conversations Deck, keep purchase access connected, and return to your private conversation ritual.";
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/signup">
-  <section class="mx-auto max-w-xl py-8 sm:py-10">
+  <section class="mx-auto grid max-w-5xl gap-6 py-8 sm:py-10 lg:grid-cols-[minmax(0,.82fr)_minmax(20rem,.78fr)] lg:items-center">
       <div class="relative overflow-hidden rounded-[1.75rem] bg-white/90 p-5 shadow-[0_24px_70px_rgba(216,160,168,0.14)] ring-1 ring-white sm:p-7">
         <div class="pointer-events-none absolute inset-x-0 top-0 h-1 bg-[linear-gradient(90deg,var(--color-rose-600),rgba(232,216,205,0.9))]"></div>
         <div class="relative">
@@ -71,5 +96,231 @@ const description = "Create your Love Alaoui account to unlock The Better Conver
           </div>
         </div>
       </div>
+
+      <aside class="relative overflow-hidden rounded-[1.75rem] bg-[linear-gradient(180deg,rgba(255,250,247,0.96),rgba(255,244,247,0.90))] p-5 shadow-[0_24px_70px_rgba(216,160,168,0.12)] ring-1 ring-white/90 sm:p-7" aria-labelledby="signup-preview-heading" data-signup-deck>
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Test cards</p>
+            <h2 id="signup-preview-heading" class="font-editorial mt-2 text-[clamp(2rem,5vw,3rem)] font-medium leading-[0.98] text-base-900">Try the feeling first.</h2>
+            <p class="mt-3 max-w-sm text-sm leading-relaxed text-base-700">Slide through a few sample cards before you unlock the full 120.</p>
+          </div>
+        </div>
+
+        <div class="signup-deck-stage" aria-live="polite">
+          <div class="signup-card-back signup-card-back-one"></div>
+          <div class="signup-card-back signup-card-back-two"></div>
+          <article class="signup-card" data-signup-card-shell>
+            <div class="signup-card-brand">
+              <img src={logoInline.src} alt="Love Alaoui" class="signup-card-logo" />
+              <span data-signup-count>1 / {previewDeckCards.length}</span>
+            </div>
+            <img src={previewDeckCards[0].characterImage} alt="" class="signup-card-character" data-signup-character aria-hidden="true" />
+            <p class="signup-card-mode" data-signup-mode>{previewDeckCards[0].mode}</p>
+            <h3 class="signup-card-question" data-signup-question>{previewDeckCards[0].question}</h3>
+            <div class="signup-card-note">
+              <p>Follow-up</p>
+              <span data-signup-follow>{previewDeckCards[0].followUp}</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="mt-4 flex flex-wrap gap-2">
+          <button type="button" class="signup-deck-control" data-signup-prev>Previous</button>
+          <button type="button" class="signup-deck-control signup-deck-control-primary" data-signup-next>Next test card</button>
+        </div>
+      </aside>
   </section>
+
+  <script is:inline define:vars={{ previewDeckCards }}>
+    const root = document.querySelector("[data-signup-deck]");
+    const cards = previewDeckCards;
+
+    if (root && cards.length > 0) {
+      let currentIndex = 0;
+      const shell = root.querySelector("[data-signup-card-shell]");
+      const count = root.querySelector("[data-signup-count]");
+      const character = root.querySelector("[data-signup-character]");
+      const mode = root.querySelector("[data-signup-mode]");
+      const question = root.querySelector("[data-signup-question]");
+      const follow = root.querySelector("[data-signup-follow]");
+      const prev = root.querySelector("[data-signup-prev]");
+      const next = root.querySelector("[data-signup-next]");
+
+      const render = (nextIndex) => {
+        currentIndex = (nextIndex + cards.length) % cards.length;
+        const card = cards[currentIndex];
+        shell?.classList.remove("is-sliding");
+        requestAnimationFrame(() => shell?.classList.add("is-sliding"));
+
+        if (count) count.textContent = `${currentIndex + 1} / ${cards.length}`;
+        if (character) character.setAttribute("src", currentIndex % 2 === 0 ? card.characterImage : card.characterAltImage);
+        if (mode) mode.textContent = card.mode;
+        if (question) question.textContent = card.question;
+        if (follow) follow.textContent = card.followUp;
+      };
+
+      prev?.addEventListener("click", () => render(currentIndex - 1));
+      next?.addEventListener("click", () => render(currentIndex + 1));
+    }
+  </script>
+
+  <style>
+    .signup-deck-stage {
+      position: relative;
+      min-height: 27rem;
+      display: grid;
+      place-items: center;
+      isolation: isolate;
+    }
+
+    .signup-card,
+    .signup-card-back {
+      width: min(100%, 19.5rem);
+      min-height: 24.5rem;
+      border-radius: 1.65rem;
+      transform-origin: 50% 82%;
+    }
+
+    .signup-card-back {
+      position: absolute;
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 18px 42px rgba(104, 74, 74, 0.08);
+    }
+
+    .signup-card-back-one {
+      transform: translate(-0.85rem, 0.75rem) rotate(-8deg);
+      background: #f6efea;
+    }
+
+    .signup-card-back-two {
+      transform: translate(0.9rem, 0.5rem) rotate(7deg);
+      background: #fff2f5;
+    }
+
+    .signup-card {
+      position: relative;
+      z-index: 2;
+      overflow: hidden;
+      padding: 0.95rem;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 197, 217, 0.34), transparent 24%),
+        radial-gradient(circle at 88% 18%, rgba(232, 216, 205, 0.48), transparent 22%),
+        linear-gradient(180deg, #fffdfb 0%, #fff2f5 100%);
+      border: 1px solid rgba(255, 255, 255, 0.98);
+      box-shadow: 0 24px 68px rgba(104, 74, 74, 0.15);
+    }
+
+    .signup-card.is-sliding {
+      animation: signup-card-slide 280ms ease;
+    }
+
+    .signup-card-brand {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      color: var(--color-base-500);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .signup-card-logo {
+      width: 6.8rem;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .signup-card-character {
+      display: block;
+      width: 5.9rem;
+      height: 5.9rem;
+      object-fit: contain;
+      margin: 0.8rem auto 0;
+      filter: drop-shadow(0 12px 18px rgba(104, 74, 74, 0.12));
+    }
+
+    .signup-card-mode {
+      margin-top: 0.9rem;
+      color: var(--color-rose-700);
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .signup-card-question {
+      margin-top: 0.7rem;
+      color: var(--color-base-900);
+      font-family: "Newsreader", ui-serif, Georgia, serif;
+      font-size: clamp(1.45rem, 4.5vw, 2.05rem);
+      font-weight: 500;
+      line-height: 0.98;
+    }
+
+    .signup-card-note {
+      position: absolute;
+      inset-inline: 0.95rem;
+      bottom: 0.95rem;
+      border-radius: 1.1rem;
+      background: rgba(255, 255, 255, 0.78);
+      padding: 0.75rem 0.85rem;
+      box-shadow: 0 10px 24px rgba(104, 74, 74, 0.06);
+    }
+
+    .signup-card-note p {
+      color: var(--color-base-500);
+      font-size: 0.62rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .signup-card-note span {
+      margin-top: 0.3rem;
+      display: block;
+      color: var(--color-base-800);
+      font-size: 0.85rem;
+      line-height: 1.35;
+    }
+
+    .signup-deck-control {
+      display: inline-flex;
+      min-height: 2.6rem;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.84);
+      padding: 0.65rem 0.95rem;
+      color: var(--color-base-900);
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 10px 24px rgba(104, 74, 74, 0.06);
+      transition: transform 160ms ease, background-color 160ms ease;
+    }
+
+    .signup-deck-control:hover {
+      transform: translateY(-1px);
+      background: white;
+    }
+
+    .signup-deck-control-primary {
+      background: var(--color-rose-600);
+      color: white;
+    }
+
+    .signup-deck-control-primary:hover {
+      background: var(--color-rose-700);
+    }
+
+    @keyframes signup-card-slide {
+      0% {
+        transform: translateY(0.65rem) rotate(-2deg) scale(0.985);
+      }
+      100% {
+        transform: translateY(0) rotate(0deg) scale(1);
+      }
+    }
+  </style>
 </BaseLayout>
