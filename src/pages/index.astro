@@ -149,10 +149,10 @@ const description = "A one-time-purchase digital conversation deck for couples w
     </section>
 
     <section id="preview" class="overflow-hidden rounded-[2rem] bg-[linear-gradient(180deg,rgba(255,250,247,0.96),rgba(255,244,247,0.90))] p-5 shadow-[0_24px_70px_rgba(216,160,168,0.12)] ring-1 ring-white/90 sm:p-5" aria-labelledby="preview-heading" data-landing-deck>
-      <div class="grid gap-5 lg:grid-cols-[minmax(0,.74fr)_minmax(18rem,.66fr)] lg:items-center">
-        <div>
+      <div class="grid gap-5 md:grid-cols-[minmax(0,.72fr)_minmax(18rem,.72fr)] md:items-center">
+        <div class="relative z-10">
           <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Try the deck</p>
-          <h2 id="preview-heading" class="font-editorial mt-3 max-w-lg text-[clamp(2rem,4.2vw,3rem)] font-medium leading-[0.98] text-base-900">
+          <h2 id="preview-heading" class="font-editorial mt-3 max-w-[11ch] text-[clamp(2rem,4.2vw,3rem)] font-medium leading-[0.98] text-base-900">
             Slide through a few test cards.
           </h2>
           <p class="mt-4 max-w-lg text-sm leading-relaxed text-base-700 sm:text-base">
@@ -267,18 +267,19 @@ const description = "A one-time-purchase digital conversation deck for couples w
   <style>
     .landing-deck-stage {
       position: relative;
-      min-height: 27rem;
+      overflow: hidden;
+      min-height: 29rem;
       display: grid;
       align-content: center;
       justify-items: center;
-      padding-top: 2.5rem;
+      padding-top: 1.6rem;
       isolation: isolate;
     }
 
     .landing-card,
     .landing-card-back {
-      width: min(100%, 19.25rem);
-      min-height: 24.1rem;
+      width: min(100%, 21rem);
+      min-height: 27.6rem;
       border-radius: 1.8rem;
       transform-origin: 50% 82%;
     }
@@ -290,12 +291,12 @@ const description = "A one-time-purchase digital conversation deck for couples w
     }
 
     .landing-card-back-one {
-      transform: translate(-1rem, 0.9rem) rotate(-8deg);
+      transform: translate(-0.75rem, 0.9rem) rotate(-8deg);
       background: #f6efea;
     }
 
     .landing-card-back-two {
-      transform: translate(1.2rem, 0.65rem) rotate(7deg);
+      transform: translate(0.8rem, 0.65rem) rotate(7deg);
       background: #fff2f5;
     }
 
@@ -305,8 +306,8 @@ const description = "A one-time-purchase digital conversation deck for couples w
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 0.48rem;
-      padding: 0.82rem;
+      gap: 0.58rem;
+      padding: 1rem;
       background:
         radial-gradient(circle at 12% 18%, rgba(255, 197, 217, 0.34), transparent 24%),
         radial-gradient(circle at 88% 18%, rgba(232, 216, 205, 0.48), transparent 22%),
@@ -332,15 +333,15 @@ const description = "A one-time-purchase digital conversation deck for couples w
     }
 
     .landing-card-logo {
-      width: 6.2rem;
+      width: 7.2rem;
       height: auto;
       object-fit: contain;
     }
 
     .landing-card-character {
       display: block;
-      width: 4rem;
-      height: 4rem;
+      width: 5rem;
+      height: 5rem;
       object-fit: contain;
       margin: 0.1rem auto 0;
       filter: drop-shadow(0 12px 20px rgba(104, 74, 74, 0.12));
@@ -359,9 +360,9 @@ const description = "A one-time-purchase digital conversation deck for couples w
       margin-top: 0;
       color: var(--color-base-900);
       font-family: "Newsreader", ui-serif, Georgia, serif;
-      font-size: clamp(1.08rem, 2.45vw, 1.35rem);
+      font-size: clamp(1.42rem, 3.35vw, 1.92rem);
       font-weight: 500;
-      line-height: 1.03;
+      line-height: 1.01;
       overflow-wrap: anywhere;
     }
 
@@ -369,7 +370,7 @@ const description = "A one-time-purchase digital conversation deck for couples w
       margin-top: auto;
       border-radius: 1.2rem;
       background: rgba(255, 255, 255, 0.78);
-      padding: 0.65rem 0.75rem;
+      padding: 0.78rem 0.9rem;
       box-shadow: 0 10px 24px rgba(104, 74, 74, 0.06);
     }
 
@@ -385,15 +386,15 @@ const description = "A one-time-purchase digital conversation deck for couples w
       margin-top: 0.35rem;
       display: block;
       color: var(--color-base-800);
-      font-size: 0.78rem;
-      line-height: 1.24;
+      font-size: 0.88rem;
+      line-height: 1.3;
       overflow-wrap: anywhere;
     }
 
     .landing-deck-toolbar {
       position: absolute;
       z-index: 4;
-      top: 0.25rem;
+      top: 0.05rem;
       bottom: auto;
       left: 50%;
       display: flex;
@@ -453,12 +454,12 @@ const description = "A one-time-purchase digital conversation deck for couples w
 
     @media (max-width: 640px) {
       .landing-deck-stage {
-        min-height: 29rem;
+        min-height: 29.5rem;
       }
 
       .landing-card,
       .landing-card-back {
-        min-height: 25.75rem;
+        min-height: 28rem;
       }
 
       .landing-card-question {
