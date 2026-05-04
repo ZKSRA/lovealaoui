@@ -98,11 +98,15 @@ const description = "Create your Love Alaoui account to unlock The Better Conver
       </div>
 
       <aside class="relative overflow-hidden rounded-[1.75rem] bg-[linear-gradient(180deg,rgba(255,250,247,0.96),rgba(255,244,247,0.90))] p-4 shadow-[0_24px_70px_rgba(216,160,168,0.12)] ring-1 ring-white/90" aria-labelledby="signup-preview-heading" data-signup-deck>
-        <div class="flex items-start justify-between gap-4">
+        <div>
           <div>
             <p class="text-xs font-medium uppercase tracking-[0.22em] text-rose-700">Test cards</p>
-            <h2 id="signup-preview-heading" class="font-editorial mt-1 text-[clamp(1.38rem,2.7vw,1.85rem)] font-medium leading-[0.98] text-base-900">Try the feeling first.</h2>
-            <p class="mt-1.5 max-w-sm text-sm leading-snug text-base-700">Preview a few cards before you unlock all 120.</p>
+            <h2 id="signup-preview-heading" class="font-editorial mt-1 text-[clamp(1.25rem,2.1vw,1.55rem)] font-medium leading-[0.98] text-base-900">Try the feeling first.</h2>
+            <p class="mt-1.5 max-w-[16rem] text-sm leading-snug text-base-700">Preview a few cards before you unlock all 120.</p>
+          </div>
+          <div class="signup-deck-actions" aria-label="Test card controls">
+            <button type="button" class="signup-deck-nav" data-signup-prev aria-label="Previous test card">Prev</button>
+            <button type="button" class="signup-deck-nav signup-deck-nav-next" data-signup-next aria-label="Next test card">Next</button>
           </div>
         </div>
 
@@ -122,11 +126,6 @@ const description = "Create your Love Alaoui account to unlock The Better Conver
               <span data-signup-follow>{previewDeckCards[0].followUp}</span>
             </div>
           </article>
-        </div>
-
-        <div class="mt-2 flex flex-wrap gap-2">
-          <button type="button" class="signup-deck-control" data-signup-prev>Previous</button>
-          <button type="button" class="signup-deck-control signup-deck-control-primary" data-signup-next>Next test card</button>
         </div>
       </aside>
   </section>
@@ -288,32 +287,40 @@ const description = "Create your Love Alaoui account to unlock The Better Conver
       overflow-wrap: anywhere;
     }
 
-    .signup-deck-control {
+    .signup-deck-actions {
+      display: flex;
+      gap: 0.35rem;
+      margin-top: 0.6rem;
+      justify-content: flex-end;
+    }
+
+    .signup-deck-nav {
       display: inline-flex;
-      min-height: 2rem;
+      min-height: 1.85rem;
+      min-width: 3.1rem;
       align-items: center;
       justify-content: center;
       border-radius: 999px;
       background: rgba(255, 255, 255, 0.84);
-      padding: 0.42rem 0.64rem;
+      padding: 0.34rem 0.52rem;
       color: var(--color-base-900);
-      font-size: 0.76rem;
+      font-size: 0.68rem;
       font-weight: 600;
       box-shadow: 0 10px 24px rgba(104, 74, 74, 0.06);
       transition: transform 160ms ease, background-color 160ms ease;
     }
 
-    .signup-deck-control:hover {
+    .signup-deck-nav:hover {
       transform: translateY(-1px);
       background: white;
     }
 
-    .signup-deck-control-primary {
+    .signup-deck-nav-next {
       background: var(--color-rose-600);
       color: white;
     }
 
-    .signup-deck-control-primary:hover {
+    .signup-deck-nav-next:hover {
       background: var(--color-rose-700);
     }
 

@@ -191,12 +191,6 @@ const description = purchased
           </p>
         </div>
 
-        <div class="flex flex-wrap gap-1.5">
-          <button type="button" class="deck-control" data-prev-card>Previous</button>
-          <button type="button" class="deck-control deck-control-primary" data-next-card>{purchased ? "Next card" : "Next preview"}</button>
-          <button type="button" class="deck-control" data-shuffle-card>Shuffle</button>
-        </div>
-
         {!purchased && (
           <form method="post" action="/api/checkout" class="rounded-[1.5rem] bg-base-900 p-4 text-white shadow-[0_16px_40px_rgba(45,30,30,0.14)]">
             <input type="hidden" name="productSlug" value={DEFAULT_PRODUCT.slug} />
@@ -210,6 +204,7 @@ const description = purchased
         </div>
 
         <div class="deck-stage" aria-live="polite">
+          <button type="button" class="deck-card-nav deck-card-nav-prev" data-prev-card aria-label="Previous card">Previous</button>
           <div class="deck-card-shadow deck-card-shadow-one"></div>
           <div class="deck-card-shadow deck-card-shadow-two"></div>
           <div class="deck-card-shadow deck-card-shadow-three"></div>
@@ -234,6 +229,8 @@ const description = purchased
               </div>
             </div>
           </article>
+          <button type="button" class="deck-card-nav deck-card-nav-next" data-next-card aria-label={purchased ? "Next card" : "Next preview card"}>{purchased ? "Next" : "Preview"}</button>
+          <button type="button" class="deck-card-shuffle" data-shuffle-card>Shuffle</button>
         </div>
       </div>
     </section>
@@ -479,7 +476,10 @@ const description = purchased
       overflow-wrap: anywhere;
     }
 
-    .deck-control {
+    .deck-card-nav,
+    .deck-card-shuffle {
+      position: absolute;
+      z-index: 4;
       display: inline-flex;
       min-height: 2.3rem;
       align-items: center;
@@ -494,18 +494,33 @@ const description = purchased
       transition: transform 160ms ease, background-color 160ms ease;
     }
 
-    .deck-control:hover {
+    .deck-card-nav:hover,
+    .deck-card-shuffle:hover {
       transform: translateY(-1px);
       background: white;
     }
 
-    .deck-control-primary {
+    .deck-card-nav-prev {
+      left: 1.25rem;
+      bottom: 0.35rem;
+    }
+
+    .deck-card-nav-next {
+      right: 1.25rem;
+      bottom: 0.35rem;
       background: var(--color-rose-600);
       color: white;
     }
 
-    .deck-control-primary:hover {
+    .deck-card-nav-next:hover {
       background: var(--color-rose-700);
+    }
+
+    .deck-card-shuffle {
+      right: 1.25rem;
+      top: 0.45rem;
+      background: rgba(255, 255, 255, 0.72);
+      font-size: 0.72rem;
     }
 
     @keyframes deal-card {
